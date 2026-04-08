@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/Rafnuss/GeoLocator-DP/v1.0/geolocator-dp-profile.json",
+  "$schema": "https://raw.githubusercontent.com/GeoPressure/GeoLocatoR-DP/v1.0/geolocator-dp-profile.json",
   "resources": [
     {
       "name": "twilights",
@@ -11,7 +11,7 @@
       "schema": {
         "name": "twilights",
         "title": "Twilights",
-        "description": "Table containing twilight data inferred from light data for all tags. Twilight data is typically computed with [`GeoPressureR::twilight_create()`](https://raphaelnussbaumer.com/GeoPressureR/reference/twilight_create.html).",
+        "description": "Table containing twilight data inferred from light data for all tags. Twilight data is typically computed with [`GeoPressureR::twilight_create()`](https://geopressure.org/GeoPressureR/reference/twilight_create.html).",
         "$schema": "https://datapackage.org/profiles/2.0/tableschema.json",
         "fields": [
           {
@@ -44,7 +44,7 @@
           },
           {
             "name": "label",
-            "description": "Labeling of twilight data according to the [GeoPressureManual](https://raphaelnussbaumer.com/GeoPressureManual/light-map.html#manual-labelling-of-twilight). The value `discard` indicates that the twilight should not be used for geopositioning. Any other value can be used without affecting the workflow; setting it to `stap_id` typically helps visualize which twilights belong to the same stationary period in the training set.",
+            "description": "Labeling of twilight data according to the [GeoPressureManual](/GeoPressureManual/light-map.html#manual-labelling-of-twilight). The value `discard` indicates that the twilight should not be used for geopositioning. Any other value can be used without affecting the workflow; setting it to `stap_id` typically helps visualize which twilights belong to the same stationary period in the training set.",
             "type": "string",
             "constraints": {
               "required": false
@@ -75,7 +75,7 @@
       "schema": {
         "name": "staps",
         "title": "Stationary periods",
-        "description": "A stationary period (`stap`) is [a key concept in the GeoPressureR workflow](https://raphaelnussbaumer.com/GeoPressureManual/tag-object#label-tag-into-stationary-periods) that discretizes a bird trajectory in time and space. During a single `stap`, the bird is assumed to remain at the same location (+/- tens of kilometers). [`flight`](https://raphaelnussbaumer.com/GeoPressureR/reference/stap2flight) is the converse of `stap`, with `flight.start` corresponding to a `stap.end`, and vice versa.\n\n{:.alert .alert-info}\n`stap_id` is indexed within each `tag_id` (it is not globally unique), so the table key is the composite pair (`tag_id`, `stap_id`). `staps` are typically estimated by [`GeoPressureR::tag_label_stap()`](https://raphaelnussbaumer.com/GeoPressureR/reference/tag_label_stap) based on the `'flight'` labels assigned to pressure or acceleration measurements ([`measurements.label`](/GeoLocator-DP/core/measurements#label)). See the [GeoPressureManual](https://raphaelnussbaumer.com/GeoPressureManual/labelling-tracks) for more details.",
+        "description": "A stationary period (`stap`) is [a key concept in the GeoPressureR workflow](/GeoPressureManual/tag-object#label-tag-into-stationary-periods) that discretizes a bird trajectory in time and space. During a single `stap`, the bird is assumed to remain at the same location (+/- tens of kilometers). [`flight`](https://geopressure.org/GeoPressureR/reference/stap2flight) is the converse of `stap`, with `flight.start` corresponding to a `stap.end`, and vice versa.\n\n{:.alert .alert-info}\n`stap_id` is indexed within each `tag_id` (it is not globally unique), so the table key is the composite pair (`tag_id`, `stap_id`). `staps` are typically estimated by [`GeoPressureR::tag_label_stap()`](https://geopressure.org/GeoPressureR/reference/tag_label_stap) based on the `'flight'` labels assigned to pressure or acceleration measurements ([`measurements.label`](/GeoLocator-DP/core/measurements#label)). See the [GeoPressureManual](/GeoPressureManual/labelling-tracks) for more details.",
         "$schema": "https://datapackage.org/profiles/2.0/tableschema.json",
         "fields": [
           {
@@ -119,7 +119,7 @@
           },
           {
             "name": "known_lat",
-            "description": "Latitude of the known stationary period. This value is typically assigned by [`GeoPressureR::tag_set_map()`](https://raphaelnussbaumer.com/GeoPressureR/reference/tag_set_map).",
+            "description": "Latitude of the known stationary period. This value is typically assigned by [`GeoPressureR::tag_set_map()`](https://geopressure.org/GeoPressureR/reference/tag_set_map).",
             "type": "number",
             "constraints": {
               "required": false,
@@ -131,7 +131,7 @@
           },
           {
             "name": "known_lon",
-            "description": "Longitude of the known stationary period. This value is typically assigned by [`GeoPressureR::tag_set_map()`](https://raphaelnussbaumer.com/GeoPressureR/reference/tag_set_map).",
+            "description": "Longitude of the known stationary period. This value is typically assigned by [`GeoPressureR::tag_set_map()`](https://geopressure.org/GeoPressureR/reference/tag_set_map).",
             "type": "number",
             "constraints": {
               "required": false,
@@ -180,7 +180,7 @@
           },
           {
             "name": "type",
-            "description": "One of:\n - `tag`: Created with [`tag2path()`](https://raphaelnussbaumer.com/GeoPressureR/reference/tag2path) from a likelihood map.\n - `most_likely`: Created with [`graph_most_likely()`](https://raphaelnussbaumer.com/GeoPressureR/reference/graph_most_likely.html).\n - `simulation`: Created by [`graph_simulation()`](https://raphaelnussbaumer.com/GeoPressureR/reference/graph_simulation).\n - `geopressureviz`: Created by [`geopressureviz()`](https://raphaelnussbaumer.com/GeoPressureR/reference/geopressureviz).",
+            "description": "One of:\n - `tag`: Created with [`tag2path()`](https://geopressure.org/GeoPressureR/reference/tag2path) from a likelihood map.\n - `most_likely`: Created with [`graph_most_likely()`](https://geopressure.org/GeoPressureR/reference/graph_most_likely.html).\n - `simulation`: Created by [`graph_simulation()`](https://geopressure.org/GeoPressureR/reference/graph_simulation).\n - `geopressureviz`: Created by [`geopressureviz()`](https://geopressure.org/GeoPressureR/reference/geopressureviz).",
             "type": "string",
             "constraints": {
               "required": true,
@@ -223,7 +223,7 @@
           },
           {
             "name": "j",
-            "description": "Unique identifier for each trajectory. Only useful for `paths.type='simulation'`. Integer from `1` to `nj` as defined in [`GeoPressureR::graph_simulation()`](https://raphaelnussbaumer.com/GeoPressureR/reference/graph_simulation).",
+            "description": "Unique identifier for each trajectory. Only useful for `paths.type='simulation'`. Integer from `1` to `nj` as defined in [`GeoPressureR::graph_simulation()`](https://geopressure.org/GeoPressureR/reference/graph_simulation).",
             "type": "integer",
             "constraints": {
               "required": false,
@@ -262,7 +262,7 @@
       "schema": {
         "name": "edges",
         "title": "Edges",
-        "description": "In GeoPressureR, `edges` (graph edges; see more information on the movement model in the [GeoPressureManual](https://raphaelnussbaumer.com/GeoPressureManual/trajectory.html)) are used to extract flight information from GeoPressureR [`paths`](/GeoLocator-DP/geopressurer/paths) using `path2edge()`.",
+        "description": "In GeoPressureR, `edges` (graph edges; see more information on the movement model in the [GeoPressureManual](/GeoPressureManual/trajectory.html)) are used to extract flight information from GeoPressureR [`paths`](/GeoLocator-DP/geopressurer/paths) using `path2edge()`.",
         "$schema": "https://datapackage.org/profiles/2.0/tableschema.json",
         "fields": [
           {
@@ -352,7 +352,7 @@
           },
           {
             "name": "j",
-            "description": "Same as [`paths.j`](/GeoLocator-DP/geopressurer/paths#j). Unique identifier for each trajectory. Only useful for `edges.type='simulation'`. Integer from `1` to `nj` as defined in [`GeoPressureR::graph_simulation()`](https://raphaelnussbaumer.com/GeoPressureR/reference/graph_simulation).",
+            "description": "Same as [`paths.j`](/GeoLocator-DP/geopressurer/paths#j). Unique identifier for each trajectory. Only useful for `edges.type='simulation'`. Integer from `1` to `nj` as defined in [`GeoPressureR::graph_simulation()`](https://geopressure.org/GeoPressureR/reference/graph_simulation).",
             "type": "integer",
             "constraints": {
               "required": false,
@@ -491,7 +491,7 @@
       "schema": {
         "name": "tags",
         "title": "Tags",
-        "description": "`tags.csv` is a [tabular data](https://datapackage.org/standard/glossary/#tabular-data) resource from a GeoLocator Data Package. Each tag listed in this table is assumed to have been deployed only once on a single bird. This table contains information about the device, the deployment, and the equipped bird. Data collected on the bird that may change over time (e.g., `age_class`) should be provided in the [`observations`](/GeoLocator-DP/core/observations) table.\n\nAdditional data can be provided by following the [Movebank tag attribute dictionary](https://www.movebank.org/cms/movebank-content/movebank-attribute-dictionary#tag_attributes) and [Movebank deployment attribute dictionary](https://www.movebank.org/cms/movebank-content/movebank-attribute-dictionary#deployment_attributes).\n\n **Example:** [`tags.csv`](https://github.com/Rafnuss/GeoLocator-DP/blob/main/example/tags.csv)",
+        "description": "`tags.csv` is a [tabular data](https://datapackage.org/standard/glossary/#tabular-data) resource from a GeoLocator Data Package. Each tag listed in this table is assumed to have been deployed only once on a single bird. This table contains information about the device, the deployment, and the equipped bird. Data collected on the bird that may change over time (e.g., `age_class`) should be provided in the [`observations`](/GeoLocator-DP/core/observations) table.\n\nAdditional data can be provided by following the [Movebank tag attribute dictionary](https://www.movebank.org/cms/movebank-content/movebank-attribute-dictionary#tag_attributes) and [Movebank deployment attribute dictionary](https://www.movebank.org/cms/movebank-content/movebank-attribute-dictionary#deployment_attributes).\n\n **Example:** [`tags.csv`](https://github.com/GeoPressure/GeoLocatoR-DP/blob/main/example/tags.csv)",
         "$schema": "https://datapackage.org/profiles/2.0/tableschema.json",
         "fields": [
           {
@@ -507,7 +507,7 @@
           },
           {
             "name": "datapackage_id",
-            "description": "Optional identifier of the data package for this tag, typically corresponding to the `datapackage.id`. This field is mostly used when [merging multiple data packages](https://raphaelnussbaumer.com/GeoLocatoR/reference/merge_gldp.html).",
+            "description": "Optional identifier of the data package for this tag, typically corresponding to the `datapackage.id`. This field is mostly used when [merging multiple data packages](https://geopressure.org/GeoLocatoR/reference/merge_gldp.html).",
             "type": "string",
             "constraints": {
               "required": false
@@ -622,7 +622,7 @@
       "schema": {
         "name": "observations",
         "title": "observations",
-        "description": "`observations.csv` is a [tabular data](https://datapackage.org/standard/glossary/#tabular-data) resource from a GeoLocator Data Package containing relevant [events](http://rs.tdwg.org/dwc/terms/Event) (datetime and location) that typically happen in the field and provide important information for analysis. These observations should include at least equipment and, when appropriate, retrieval events, as well as ringing controls or direct sightings.\n\n{:.alert .alert-info}\nYou can think of `observations` as your log entries in your ringing book.\n\nAn observation is described at minimum by `datetime`, location (`latitude` and `longitude`), `ring_number`, and `observation_type` (e.g., equipment, retrieval, or capture). In addition, `sex` and `age_class` are required (use `U` for unknown `sex` and `0` for unknown `age_class`).\n\nAlso include ringing events for any control group (i.e., birds ringed but not equipped with a tag).\n\n **Example:** [`observations.csv`](https://github.com/Rafnuss/GeoLocator-DP/blob/main/example/observations.csv)",
+        "description": "`observations.csv` is a [tabular data](https://datapackage.org/standard/glossary/#tabular-data) resource from a GeoLocator Data Package containing relevant [events](http://rs.tdwg.org/dwc/terms/Event) (datetime and location) that typically happen in the field and provide important information for analysis. These observations should include at least equipment and, when appropriate, retrieval events, as well as ringing controls or direct sightings.\n\n{:.alert .alert-info}\nYou can think of `observations` as your log entries in your ringing book.\n\nAn observation is described at minimum by `datetime`, location (`latitude` and `longitude`), `ring_number`, and `observation_type` (e.g., equipment, retrieval, or capture). In addition, `sex` and `age_class` are required (use `U` for unknown `sex` and `0` for unknown `age_class`).\n\nAlso include ringing events for any control group (i.e., birds ringed but not equipped with a tag).\n\n **Example:** [`observations.csv`](https://github.com/GeoPressure/GeoLocatoR-DP/blob/main/example/observations.csv)",
         "$schema": "https://datapackage.org/profiles/2.0/tableschema.json",
         "fields": [
           {
@@ -878,7 +878,7 @@
           },
           {
             "name": "label",
-            "description": "Labeling of pressure and acceleration data according to the [labeling chapter of the GeoPressureManual](https://raphaelnussbaumer.com/GeoPressureManual/labelling-tracks.html).",
+            "description": "Labeling of pressure and acceleration data according to the [labeling chapter of the GeoPressureManual](/GeoPressureManual/labelling-tracks.html).",
             "type": "string",
             "constraints": {
               "required": false,

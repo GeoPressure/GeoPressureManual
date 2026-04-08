@@ -8,25 +8,24 @@ aliases:
 This tutorial explains how to create a GeoLocator Data Package (GeoLocator DP) from a GeoPressureTemplate project, upload it to Zenodo, and validate the draft before publication.
 
 ::: callout-note
-For an introduction to this format, visit the [GeoLocator DP website](https://raphaelnussbaumer.com/GeoLocator-DP/).
+For an introduction to this format, visit the [GeoLocator DP website](https://geopressure.org/GeoLocator-DP/).
 :::
 
 
 ## Install GeoLocatoR
-<a href="https://github.com/rafnuss/geolocator"><img src="https://raphaelnussbaumer.com/GeoLocatoR/logo.png" align="right" height="139" alt="GeoLocatoR website" style="padding-left:5px;" /></a>
+<a href="https://github.com/GeoPressure/GeoLocatoR"><img src="https://geopressure.org/GeoLocatoR/logo.png" align="right" height="139" alt="GeoLocatoR website" style="padding-left:5px;" /></a>
 
-We use the [GeoLocatoR](https://raphaelnussbaumer.com/GeoLocatoR) package to create and validate the data package.
+We use the [GeoLocatoR](https://geopressure.org/GeoLocatoR) package to create and validate the data package.
 
 ```{r 15-install-geolocator}
 #| eval: false
 # install.packages("pak")
-pak::pkg_install("Rafnuss/GeoLocatoR")
+pak::pkg_install("GeoPressure/GeoLocatoR")
 ```
 
 ```{r 15-setup}
 #| message: false
-devtools::load_all("~/Documents/GitHub/GeoLocatoR/")
-# library(GeoLocatoR)
+library(GeoLocatoR)
 ```
 
 ## Step 1. Create the package from GeoPressureTemplate
@@ -110,7 +109,7 @@ Complete **all** items below. If one or more are missing, the record may be retu
 - [ ] Add the GitHub link of the GeoPressureTemplate used
 - [ ] Add any additional metadata you want to include
 
-Review the [GeoLocator DP curation policy](https://raphaelnussbaumer.com/GeoLocator-DP/curation) before submission.
+Review the [GeoLocator DP curation policy](https://geopressure.org/GeoLocator-DP/curation) before submission.
 
 :::
 
@@ -129,7 +128,9 @@ keyring::key_set_with_value("ZENODO_TOKEN", password = "{your_zenodo_token}")
 :::
 
 ```{r 15-read-zenodo-draft}
+#| eval: false
 #| collapse: true
+#| message: false
 pkg <- read_zenodo(
   "10.5072/zenodo.472302",
   draft = TRUE, # Draft record
@@ -141,6 +142,7 @@ pkg <- read_zenodo(
 Run the official validation check on the draft package:
 
 ```{r 15-validate-gldp-zenodo}
+#| eval: false
 #| collapse: true
 validate_gldp(pkg)
 ```

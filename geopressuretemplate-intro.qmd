@@ -1,6 +1,6 @@
 # Introduction
 
-[GeoPressureTemplate](https://github.com/Rafnuss/GeoPressureTemplate) is a [GitHub repository template](https://docs.github.com/articles/creating-a-repository-from-a-template/) which contains a standard folder structure and R scripts to store your data, analyse it, and produce trajectory outputs. Download it as a starting point to organise your data and start your analysis. It's an initial flexible structure that should be adapted to each individual project.
+[GeoPressureTemplate](https://github.com/GeoPressure/GeoPressureTemplate) is a [GitHub repository template](https://docs.github.com/articles/creating-a-repository-from-a-template/) which contains a standard folder structure and R scripts to store your data, analyse it, and produce trajectory outputs. Download it as a starting point to organise your data and start your analysis. It's an initial flexible structure that should be adapted to each individual project.
 
 ## 📁 Project structure
 
@@ -54,14 +54,14 @@ GeoPressureTemplate/
 
 **Option 1: with a Github repository (recommended)**
 
-- Open [GeoPressureTemplate](https://github.com/Rafnuss/GeoPressureTemplate/) and click on the green button "Use this template" or [click here](https://github.com/Rafnuss/GeoPressureTemplate/generate) to create your repository directly.
+- Open [GeoPressureTemplate](https://github.com/GeoPressure/GeoPressureTemplate/) and click on the green button "Use this template" or [click here](https://github.com/GeoPressure/GeoPressureTemplate/generate) to create your repository directly.
 - Choose a project name (e.g., `my_tracking_study_name`) specific to your research. Note that this becomes the name of your folder on your computer too.
 - Clone the repository on your computer.
 - Done! 🎉
 
 **Option 2: using the GeoLocatoR package**
 
-Alternatively, create your project folder with [`GeoLocatoR::create_geopressuretemplate()`](https://raphaelnussbaumer.com/GeoLocatoR/reference/create_geopressuretemplate.html).
+Alternatively, create your project folder with [`GeoLocatoR::create_geopressuretemplate()`](https://geopressure.org/GeoLocatoR/reference/create_geopressuretemplate.html).
 
 ```{r 09-create-geopressuretemplate}
 #| eval: false
@@ -74,7 +74,7 @@ create_geopressuretemplate(
 
 **Option 3: Manual download**
 
-- Click [here](https://github.com/Rafnuss/GeoPressureTemplate/archive/refs/heads/main.zip) to download the repo directly 
+- Click [here](https://github.com/GeoPressure/GeoPressureTemplate/archive/refs/heads/main.zip) to download the repo directly 
 - Unzip and rename the folder with your project name.
 - Done! 🎉
 
@@ -130,8 +130,8 @@ Here we make sure everything is ready to run the model. This mainly involves def
 
 In this part, we will be presented step by step how to analyse your data:
 
-1. Run [`analysis/1-label.qmd`](/geopressuretemplate-label.html).
-2. Run [`analysis/2-twilight.qmd`](/geopressuretemplate-twilight.html), if you have light data.
+1. Run [`analysis/1-label.qmd`](geopressuretemplate-label.html).
+2. Run [`analysis/2-twilight.qmd`](geopressuretemplate-twilight.html), if you have light data.
 
 You can visualize each of the scripts in a nice-to-read HTML format, using the example of 16LX, in the next sections of this manual.
 
@@ -161,7 +161,7 @@ The `geopressuretemplate()` function allows you to run the entire GeoPressureR w
 geopressuretemplate("18LX")
 ```
 
-This creates `data/interim/18LX.RData` with all the trajectory outputs. You'll learn more in the [Workflow chapter](/geopressuretemplate-workflow.html). In GeoPressureTemplate, this is performed in the file `analysis/4-geopressuretemplate.R`.
+This creates `data/interim/18LX.RData` with all the trajectory outputs. You'll learn more in the [Workflow chapter](geopressuretemplate-workflow.html). In GeoPressureTemplate, this is performed in the file `analysis/4-geopressuretemplate.R`.
 
 ### Step 3: Your own analysis
 
@@ -176,11 +176,11 @@ For peer-review publication, it is essential that the data and code are accessib
 
 Simply publish your GeoPressureTemplate Github repository on Zenodo following [this guide](https://docs.github.com/en/repositories/archiving-a-github-repository/referencing-and-citing-content). Publishing on Zenodo will generate a DOI for your code.
 
-### Geolocator Data Package
+### GeoLocator Data Package
 
-While publishing your GeoPressureTemplate on Zenodo is a great step to allow others to see (and, if needed, reproduce) your work, it can be a challenge to re-use your track data for other purposes. To facilitate this, we created [GeoLocator Data Package](https://raphaelnussbaumer.com/GeoLocator-DP/), a data exchange format for geolocator data, providing all GeoPressureR outputs in csv files. The aim of GeoLocator DP is re-usability rather than reproduction. 
+While publishing your GeoPressureTemplate on Zenodo is a great step to allow others to see (and, if needed, reproduce) your work, it can be a challenge to re-use your track data for other purposes. To facilitate this, we created [GeoLocator Data Package](https://geopressure.org/GeoLocator-DP/), a data exchange format for geolocator data, providing all GeoPressureR outputs in csv files. The aim of GeoLocator DP is re-usability rather than reproduction. 
 
-This step is performed with the script `analysis/5-datapackage.R`. To learn more about publishing a GeoLocator Data Package, go to [GeoLocatoR DP](geolocator-intro.html).
+This step is performed with the script `analysis/5-datapackage.R`. To learn more about publishing a GeoLocator Data Package, go to [GeoLocator DP](geolocator-intro.html).
 
 
 ## 🔗 Advanced options

@@ -1,1 +1,1 @@
-Sitemap: https://raphaelnussbaumer.com/GeoPressureManual/sitemap.xml
+Sitemap: https://geopressure.org/GeoPressureManual/sitemap.xml

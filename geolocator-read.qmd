@@ -5,8 +5,7 @@ This tutorial shows how to discover, load, combine, and analyze published GeoLoc
 ```{r 16-setup}
 #| message: false
 #| code-fold: true
-# library(GeoLocatoR)
-devtools::load_all("~/Documents/GitHub/GeoLocatoR/")
+library(GeoLocatoR)
 library(GeoPressureR)
 library(dplyr)
 library(ggplot2)
@@ -39,7 +38,7 @@ theme_geolocator_modern <- function(base_size = 12) {
 
 ## Discover datasets with GeoLocatorExplorer
 
-Use the interactive [GeoLocatorExplorer](https://raphaelnussbaumer.com/GeoLocatorExplorer/) to find datasets you're interested in.
+Use the interactive [GeoLocatorExplorer](https://geopressure.org/GeoLocatorExplorer/) to find datasets you're interested in.
 
 ![<small>GeoLocatorExplorer interface to browse published geolocator data packages.</small>](assets/geolocatorexplorer.png){width="100%" alt="Screenshot of GeoLocatorExplorer showing searchable geolocator data packages"}
 

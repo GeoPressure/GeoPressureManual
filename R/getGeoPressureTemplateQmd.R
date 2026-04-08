@@ -33,21 +33,21 @@ branch <- "v3.5-trainset-geolightviz"
 # Execute the function when script is run
 getQmd(
   glue::glue(
-    "https://raw.githubusercontent.com/Rafnuss/GeoPressureTemplate/{branch}/analysis/1-label.qmd"
+    "https://raw.githubusercontent.com/GeoPressure/GeoPressureTemplate/{branch}/analysis/1-label.qmd"
   ),
   "geopressuretemplate-label.qmd"
 )
 
 getQmd(
   glue::glue(
-    "https://raw.githubusercontent.com/Rafnuss/GeoPressureTemplate/{branch}/analysis/2-twilight.qmd"
+    "https://raw.githubusercontent.com/GeoPressure/GeoPressureTemplate/{branch}/analysis/2-twilight.qmd"
   ),
   "geopressuretemplate-twilight.qmd"
 )
 
 getQmd(
   glue::glue(
-    "https://raw.githubusercontent.com/Rafnuss/GeoPressureTemplate/{branch}/config.yml"
+    "https://raw.githubusercontent.com/GeoPressure/GeoPressureTemplate/{branch}/config.yml"
   ),
   "config.yml"
 )

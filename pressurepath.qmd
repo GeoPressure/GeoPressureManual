@@ -19,7 +19,7 @@ load_interim("18LX")
 
 Before creating a full `pressurepath`, we start with the basic building block of a pressurepath, which is to retrieve the pressure timeseries from ERA5 at a single location with `geopressure_timeseries`.
 
-`geopressure_timeseries` relies on the <a href="https://raphaelnussbaumer.com/GeoPressureAPI/#pressure-timeseries" target="_blank">pressure timeseries entry point of GeoPressureAPI</a> which return the timeseries of pressure at a given latitude and longitude.
+`geopressure_timeseries` relies on the <a href="https://geopressure.org/GeoPressureAPI/#pressure-timeseries" target="_blank">pressure timeseries entry point of GeoPressureAPI</a> which return the timeseries of pressure at a given latitude and longitude.
 
 Let's start by retrieving the pressure at the known site of equipment, querying the same date as the first stationary period.
 
@@ -94,7 +94,7 @@ plot_pressurepath(pressurepath, type = "altitude")
 
 Computing the bird altitude $z_{gl}$ from its pressure measurement $P_{gl}$ is best performed with the [barometric equation](https://en.wikipedia.org/wiki/Barometric_formula)
 
-$$ z_{gl}=z_0 + \frac{T_0}{L_b}  \left( \frac{P_{gl}}{P_0} \right) ^{\frac{RL_b}{g M}-1},$$
+$$ z_{gl}=z_0 + \frac{T_0}{L_b} \left[\left( \frac{P_{gl}}{P_0} \right) ^{-\frac{RL_b}{g M}}-1\right],$$
 
 where $L_b$ is the standard temperature lapse rate, $R$ is the universal gas constant, $g$ is the gravity constant and $M$ is the molar mass of air.
 
@@ -114,9 +114,9 @@ pressurepath$altitude_uncorrected <- T0 /
 
 However, we know that pressure and temperature vary considerably over time and space, leading to approximation in the altitude estimated.
 
-Using GeoPressureAPI, we can adjust the barometric equation with the actual ground-level pressure $P_{ERA}$ and ground temperature $T_{ERA}$ retrieved from ERA5 at the bird's location $x$, $$ z_{gl}(x)=z_{ERA5}(x) + \frac{T_{ERA5}(x)}{L_b}  \left( \frac{P_{gl}}{P_{ERA5}(x)} \right) ^{\frac{RL_b}{g M}-1},$$
+Using GeoPressureAPI, we can adjust the barometric equation with the actual ground-level pressure $P_{ERA}$ and ground temperature $T_{ERA}$ retrieved from ERA5 at the bird's location $x$, $$ z_{gl}(x)=z_{ERA5}(x) + \frac{T_{ERA5}(x)}{L_b} \left[\left( \frac{P_{gl}}{P_{ERA5}(x)} \right) ^{-\frac{RL_b}{g M}}-1\right],$$
 
-See more information on the [GeoPressureAPI documentation](https://raphaelnussbaumer.com/GeoPressureAPI/#description-1).
+See more information on the [GeoPressureAPI documentation](https://geopressure.org/GeoPressureAPI/#description-1).
 
 We can compare these two altitudes for the first stationary period,
 
