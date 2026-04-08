@@ -14,16 +14,16 @@ book:
   sharing: [twitter, facebook]
   # downloads: [pdf, epub]
   doi: "10.5281/zenodo.10799355"
-  favicon: /assets/favicon.svg
-  site-url: https://raphaelnussbaumer.com/GeoPressureManual/
-  repo-url: https://github.com/Rafnuss/GeoPressureManual
-  issue-url: https://github.com/Rafnuss/GeoPressureManual/issues
+  favicon: assets/favicon.svg
+  site-url: https://geopressure.org/GeoPressureManual/
+  repo-url: https://github.com/GeoPressure/GeoPressureManual
+  issue-url: https://github.com/GeoPressure/GeoPressureManual/issues
   google-analytics: "G-NJ17NCTPB5"
   cookie-consent: true
   search: true
   # navbar:
   sidebar:
-    footer: "<a href='https://github.com/Rafnuss/GeoPressureTemplate' target='_blank' class='btn btn-sm btn-outline-primary' role='button'>Start your own study</a>"
+    footer: "<a href='https://github.com/GeoPressure/GeoPressureTemplate' target='_blank' class='btn btn-sm btn-outline-primary' role='button'>Start your own study</a>"
   # body-header: ""
   # body-footer
   # page-footer
@@ -82,11 +82,11 @@ format:
     code-link: true
     code-links:
       - text: "GeoPressureR reference"
-        href: "https://raphaelnussbaumer.com/GeoPressureR/reference/"
+        href: "https://geopressure.org/GeoPressureR/reference/"
       - text: "GeoLocatoR reference"
-        href: "https://raphaelnussbaumer.com/GeoLocatoR/reference/"
+        href: "https://geopressure.org/GeoLocatoR/reference/"
       - text: "GeoPressureTemplate"
-        href: "https://github.com/Rafnuss/GeoPressureTemplate"
+        href: "https://github.com/GeoPressure/GeoPressureTemplate"
     asciidoc: default
 
 editor: source

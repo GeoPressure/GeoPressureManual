@@ -125,7 +125,7 @@ The graph can directly and efficiently compute the most likely path, that is, th
 path_most_likely <- graph_most_likely(graph, quiet = TRUE)
 ```
 
-In GeoPressureR, a `path` is a standard data.frame created and used [in several other functions](https://raphaelnussbaumer.com/GeoPressureR/reference/index.html#path).
+In GeoPressureR, a `path` is a standard data.frame created and used [in several other functions](https://geopressure.org/GeoPressureR/reference/index.html#path).
 
 ```{r 03-path-most-likely-summary}
 knitr::kable(head(path_most_likely, 3))
@@ -166,7 +166,7 @@ plot_path(path_simulation, plot_leaflet = FALSE)
 
 ## Save
 
-You might want to save some of the key objects such as `tag` or `marginal` in an `R` format. Following the default structure described in [GeoPressureTemplate](https://github.com/Rafnuss/GeoPressureTemplate#project-structure-file_folder), you should save them in the `./data/interim` folder.
+You might want to save some of the key objects such as `tag` or `marginal` in an `R` format. Following the default structure described in [GeoPressureTemplate](https://github.com/GeoPressure/GeoPressureTemplate#project-structure-file_folder), you should save them in the `./data/interim` folder.
 
 ```{r 03-save-interim}
 #| warning: false
@@ -191,5 +191,5 @@ This manual `save()` step is only used here to learn the pipeline one step at a 
 
 For real analyses, especially when processing multiple tags, the recommended approach is to create the interim files with `geopressuretemplate()`.
 
-This workflow is described in detail in [GeoPressureTemplate workflow](https://raphaelnussbaumer.com/GeoPressureManual/geopressuretemplate-workflow.html).
+This workflow is described in detail in [GeoPressureTemplate workflow](geopressuretemplate-workflow.html).
 :::

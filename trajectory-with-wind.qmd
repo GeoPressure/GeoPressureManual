@@ -240,5 +240,5 @@ This manual `save()` step is only used here to learn the pipeline one step at a 
 
 For real analyses, especially when processing multiple tags, the recommended approach is to create the interim files with `geopressuretemplate()`.
 
-This workflow is described in detail in [GeoPressureTemplate workflow](https://raphaelnussbaumer.com/GeoPressureManual/geopressuretemplate-workflow.html).
+This workflow is described in detail in [GeoPressureTemplate workflow](geopressuretemplate-workflow.html).
 :::

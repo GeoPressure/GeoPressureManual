@@ -9,7 +9,7 @@ library(GeoPressureR)
 
 The GeoPressureR workflow follows a series of functions taking as input the raw data, the labels, and the configuration, to produce trajectory outputs.
 
-![GeoPressureR workflow diagram](assets/cheatsheet_workflow.png){fig-align="center" alt="GeoPressureR workflow cheatsheet diagram showing the complete analysis pipeline from raw data to trajectory outputs"} *Extract of the [GeoPressureR cheatsheet](https://github.com/Rafnuss/GeoPressureR?tab=readme-ov-file#cheatsheet) illustrating the workflow*
+![GeoPressureR workflow diagram](assets/cheatsheet_workflow.png){fig-align="center" alt="GeoPressureR workflow cheatsheet diagram showing the complete analysis pipeline from raw data to trajectory outputs"} *Extract of the [GeoPressureR cheatsheet](https://github.com/GeoPressure/GeoPressureR?tab=readme-ov-file#cheatsheet) illustrating the workflow*
 
 ## Presentation of `geopressuretemplate()`
 
@@ -24,28 +24,28 @@ The `geopressuretemplate()` function calls on three child functions outlined bel
 
 **1. `geopressuretemplate_tag()`**
 
-1. [`tag_create()`](https://raphaelnussbaumer.com/GeoPressureR/reference/tag_create): Initializes the tag object.
-2. [`tag_label()`](https://raphaelnussbaumer.com/GeoPressureR/reference/tag_label): Adds labels.
-3. [`tag_set_map()`](https://raphaelnussbaumer.com/GeoPressureR/reference/tag_set_map): Sets the spatial and temporal parameters.
-4. \*[`geopressure_map()`](https://raphaelnussbaumer.com/GeoPressureR/reference/geopressure_map) Computes the pressure likelihood.
-5. \*[`twilight_create()`](https://raphaelnussbaumer.com/GeoPressureR/reference/twilight_create) `|>` [`twilight_read()`](https://raphaelnussbaumer.com/GeoPressureR/reference/twilight_read) `|>` [`geolight_map()`](https://raphaelnussbaumer.com/GeoPressureR/reference/geolight_map): Computes the light likelihood.
+1. [`tag_create()`](https://geopressure.org/GeoPressureR/reference/tag_create): Initializes the tag object.
+2. [`tag_label()`](https://geopressure.org/GeoPressureR/reference/tag_label): Adds labels.
+3. [`tag_set_map()`](https://geopressure.org/GeoPressureR/reference/tag_set_map): Sets the spatial and temporal parameters.
+4. \*[`geopressure_map()`](https://geopressure.org/GeoPressureR/reference/geopressure_map) Computes the pressure likelihood.
+5. \*[`twilight_create()`](https://geopressure.org/GeoPressureR/reference/twilight_create) `|>` [`twilight_read()`](https://geopressure.org/GeoPressureR/reference/twilight_read) `|>` [`geolight_map()`](https://geopressure.org/GeoPressureR/reference/geolight_map): Computes the light likelihood.
 
 **2.`geopressuretemplate_graph()`**
 
-1. [`graph_create()`](https://raphaelnussbaumer.com/GeoPressureR/reference/graph_create): Creates the graph based on tag.
-2. \*[`graph_add_wind()`](https://raphaelnussbaumer.com/GeoPressureR/reference/graph_add_wind): Adds wind data to the graph.
-3. [`graph_set_movement()`](https://raphaelnussbaumer.com/GeoPressureR/reference/graph_set_movement): Sets the movement model
-4. \*[`graph_marginal()`](https://raphaelnussbaumer.com/GeoPressureR/reference/graph_marginal): Computes the marginal distribution map.
-5. \*[`graph_most_likely()`](https://raphaelnussbaumer.com/GeoPressureR/reference/graph_most_likely): Computes the most likely path based on the movement model.
-6. \*[`graph_simulation()`](https://raphaelnussbaumer.com/GeoPressureR/reference/graph_simulation): Runs simulations to model multiple possible paths.
+1. [`graph_create()`](https://geopressure.org/GeoPressureR/reference/graph_create): Creates the graph based on tag.
+2. \*[`graph_add_wind()`](https://geopressure.org/GeoPressureR/reference/graph_add_wind): Adds wind data to the graph.
+3. [`graph_set_movement()`](https://geopressure.org/GeoPressureR/reference/graph_set_movement): Sets the movement model
+4. \*[`graph_marginal()`](https://geopressure.org/GeoPressureR/reference/graph_marginal): Computes the marginal distribution map.
+5. \*[`graph_most_likely()`](https://geopressure.org/GeoPressureR/reference/graph_most_likely): Computes the most likely path based on the movement model.
+6. \*[`graph_simulation()`](https://geopressure.org/GeoPressureR/reference/graph_simulation): Runs simulations to model multiple possible paths.
 
 **3.`geopressuretemplate_pressurepath()`**
 
-Compute pressurepath [`pressurepath_create()`](https://raphaelnussbaumer.com/GeoPressureR/reference/pressurepath_create) of the `path_most_likely` and/or the `path_geopressureviz`. Learn more about pressurepath in the [Pressurepath](pressurepath.html) chapter.
+Compute pressurepath [`pressurepath_create()`](https://geopressure.org/GeoPressureR/reference/pressurepath_create) of the `path_most_likely` and/or the `path_geopressureviz`. Learn more about pressurepath in the [Pressurepath](pressurepath.html) chapter.
 
 ## Configuration the workflow
 
-All parameters of the workflow's function are provided in the [`config.yml`](https://github.com/Rafnuss/GeoPressureTemplate/blob/main/config.yml) file following the structure:
+All parameters of the workflow's function are provided in the [`config.yml`](https://github.com/GeoPressure/GeoPressureTemplate/blob/main/config.yml) file following the structure:
 
 ``` yml
 tag_id:

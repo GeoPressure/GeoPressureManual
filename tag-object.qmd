@@ -19,7 +19,7 @@ A [tag](https://www.movebank.org/cms/movebank-content/mb-data-model#tags) is a s
 In GeoPressureR, `tag` is an object (i.e., a [S3 class](https://stat.ethz.ch/R-manual/R-devel/library/base/html/class.html)) which is created with the raw logger data. It is modified at each step of the workflow as it aggregates all the information needed to ultimately be able to model the bird's trajectory.
 :::
 
-The `tag` object is created based on the available data stored in `./data/raw-tag/CB619/` following the default structure described in [GeoPressureTemplate](https://github.com/Rafnuss/GeoPressureTemplate#project-structure-file_folder).
+The `tag` object is created based on the available data stored in `./data/raw-tag/CB619/` following the default structure described in [GeoPressureTemplate](https://github.com/GeoPressure/GeoPressureTemplate#project-structure-file_folder).
 
 ```{r 01-tag-create}
 tag <- tag_create(id = "CB619")

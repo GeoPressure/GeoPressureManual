@@ -46,11 +46,11 @@ We are now ready to create the pressure maps!
 To do so, we must match the pressure timeseries of each stationary period with the surface level pressure dataset of ERA5-Land hourly [@copernicusclimatechangeservice2019] for all possible pixels of the maps.
 
 ::: callout-warning
-## How does the [GeoPressureAPI](https://github.com/Rafnuss/GeoPressureAPI) work?
+## How does the [GeoPressureAPI](https://github.com/GeoPressure/GeoPressureAPI) work?
 
 To overcome the challenges of handling the large ERA5 dataset, we perform the mismatch computation on the <a href="https://developers.google.com/earth-engine/" target="_blank">Google Earth Engine</a> (GEE) server which has access to the <a href="https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_HOURLY" target="_blank">ERA5 dataset</a> and directly returns the map of mismatch.
 
-GeoPressureR uses the <a href="https://github.com/Rafnuss/GeoPressureAPI" target="_blank">GeoPressureAPI</a> which serves as an interface to the GEE server.
+GeoPressureR uses the <a href="https://github.com/GeoPressure/GeoPressureAPI" target="_blank">GeoPressureAPI</a> which serves as an interface to the GEE server.
 :::
 
 The function `geopressure_map()` conveniently performs all the necessary steps, but we outline each step below for a comprehensive understanding.
