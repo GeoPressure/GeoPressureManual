@@ -33,9 +33,10 @@ Acceleration data can significantly improve our understanding of bird activity a
 ::: callout-warning
 ## Which timeseries should I label?
 
-When acceleration data is available, use the `flight` label on the acceleration timeseries, and the `discard` label on the pressure timeseries.
+Use the timeseries that provides the relevant information:
 
-In the absence of acceleration data, both labels are applied to the pressure timeseries.
+- **With acceleration data:** apply `flight` to the acceleration timeseries. On the pressure timeseries, use `discard` for unusable pressure measurements and `elev_*` for changes in elevation. No need to mark pressure as `discard` solely because the acceleration data indicates flight.
+- **Without acceleration data:** apply `flight` and, where needed, `discard` or `elev_*` directly to the pressure timeseries.
 :::
 
 Acceleration data can be used to initialize the `flight` label automatically. This step is done automatically when no label exist when starting `trainset()` but you can also refine the paramater manually using `tag_label_auto()`. 
