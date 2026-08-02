@@ -28,8 +28,8 @@ getQmd <- function(url, output_file) {
   cat("File saved as", output_file, "\n")
 }
 
-# Manually set the branch/tag to fetch from GeoPressureTemplate
-branch <- "v3.5-trainset-geolightviz"
+# Fetch the current template files used in this chapter.
+branch <- "main"
 # Execute the function when script is run
 getQmd(
   glue::glue(

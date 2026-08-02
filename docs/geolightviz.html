@@ -2,15 +2,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.10.18">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="description" content="Learn how to use GeoPressureR with a Swainson’s Warbler and a Great Reed Warbler.">
 <title>8&nbsp; GeoLightViz – A User Manual for GeoPressureR</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -69,15 +75,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-ef881a153540be65ad1a752274347fb5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-6fd5ec8c9ed70d15e49773247ffc1d7a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -113,10 +118,10 @@ gtag('config', 'G-NJ17NCTPB5', { 'anonymize_ip': true});
 document.addEventListener('DOMContentLoaded', function () {
 cookieconsent.run({
   "notice_banner_type":"simple",
-  "consent_type":"implied",
+  "consent_type":"express",
   "palette":"light",
   "language":"en",
-  "page_load_consent_levels":["strictly-necessary","functionality","tracking","targeting"],
+  "page_load_consent_levels":["strictly-necessary"],
   "notice_banner_reject_button_hide":false,
   "preferences_center_close_button_hide":false,
   "website_name":""
@@ -400,6 +405,13 @@ cookieconsent.run({
 </div>
 <p>GeoPressureR includes the <a href="https://shiny.rstudio.com/" target="_blank">shiny app</a> <code>GeoLightViz</code>, designed to label twilight data and interactively tune light-based geolocation settings.</p>
 <p>It is especially useful when pressure and/or acceleration are not available, because you can define and refine stationary periods directly from twilight patterns.</p>
+<p>In practice, <code>GeoLightViz</code> combines four tightly linked tasks:</p>
+<ol type="1">
+<li>interactive twilight quality control,</li>
+<li>manual definition of stationary periods,</li>
+<li>bidirectional time-space exploration between the light plot and map, and</li>
+<li>calibration and likelihood tuning with immediate visual feedback.</li>
+</ol>
 <section id="run-geolightviz" class="level2" data-number="8.1"><h2 data-number="8.1" class="anchored" data-anchor-id="run-geolightviz">
 <span class="header-section-number">8.1</span> Run GeoLightViz</h2>
 <p>Start the app with the <code><a href="https://geopressure.org/GeoPressureR/reference/geolightviz.html">geolightviz()</a></code> function using either</p>
@@ -412,7 +424,7 @@ cookieconsent.run({
 </section><section id="label-twilight" class="level2" data-number="8.2"><h2 data-number="8.2" class="anchored" data-anchor-id="label-twilight">
 <span class="header-section-number">8.2</span> Label Twilight</h2>
 <p>Start with twilight labelling before adjusting map or calibration settings.<br>
-The left panel shows the light heatmap and extracted twilights (yellow dots).</p>
+The left panel shows the light heatmap and extracted twilights (yellow dots). Outliers caused by shading, cavities, or vegetation can be marked as <code>"discard"</code>, and the position estimate for the current stationary period updates immediately so you can distinguish true movement from light-data artefacts.</p>
 <ol type="1">
 <li>Click <code>Edit</code> to enter twilight-labelling mode.</li>
 <li>Mark outliers as <code>"discard"</code> by clicking points individually or drag-selecting multiple points.</li>
@@ -429,9 +441,9 @@ The left panel shows the light heatmap and extracted twilights (yellow dots).</p
 <p>If pressure/acceleration are unavailable, you can define <code>stap</code> directly in GeoLightViz:</p>
 <ol type="1">
 <li>Use <code>+</code> to add a stationary period by drawing a time rectangle on the light panel.</li>
-<li>Use <code>pen</code> to redraw the range of the currently selected stationary period.</li>
+<li>Use <code>pen</code> to redraw or resize the range of the currently selected stationary period.</li>
 <li>Use <code>-</code> to remove the current stationary period.</li>
-<li>Use the top selector (or <code>&lt;</code> / <code>&gt;</code>) to move across stationary periods.</li>
+<li>Use the top selector (or <code>&lt;</code> / <code>&gt;</code>) to move across stationary periods and adjust them sequentially.</li>
 <li>Click <code>Save</code> (or <code>Export</code>) to write the <code>stap</code> file.</li>
 </ol>
 <p>When auto-save is available, the output is written to <code>data/stap-label/{id}.csv</code>.</p>
@@ -446,8 +458,10 @@ The left panel shows the light heatmap and extracted twilights (yellow dots).</p
 <p>When the map is available, the time and space views are linked:</p>
 <ol type="1">
 <li>Selecting a stationary period updates both the highlighted time window (left) and the corresponding light likelihood map (right).</li>
+<li>Hovering over or selecting a twilight event highlights its corresponding twilight line on the map, making it easier to judge whether a candidate location is consistent with that observation.</li>
 <li>
-<code>Edit Position</code> lets you click on the map to test candidate positions and immediately inspect the implied twilight lines in the left panel.</li>
+<code>Edit Position</code> lets you click on the map to test candidate positions and immediately inspect the implied sunrise/sunset times and twilight lines in the left panel.</li>
+<li>This makes quick hypothesis checks possible, for example asking whether the observed twilights are compatible with a location in Spain.</li>
 <li>
 <code>Find ML Position</code> sets the stationary-period location to the maximum-likelihood map position.</li>
 </ol>
@@ -460,11 +474,11 @@ The left panel shows the light heatmap and extracted twilights (yellow dots).</p
 <p>Open <code>Likelihood Settings</code> to tune the two main light-map components:</p>
 <ol type="1">
 <li>
-<strong>Calibration smoothness</strong> via <code>twl_calib_adjust</code>, with immediate visual diagnostics.</li>
+<strong>Calibration smoothness</strong> via <code>twl_calib_adjust</code>, with immediate visual diagnostics of the mismatch between observed and expected twilight timing at known locations.</li>
 <li>
 <strong>Twilight aggregation strength</strong> (log-linear pooling factor) controlling how strongly multiple twilights are combined within each stationary period.</li>
 </ol>
-<p>This is useful for sensitivity checks before running the full <code>geolight_map_*</code> workflow.</p>
+<p>Together with the map panel, this lets you inspect the full likelihood surface for a stationary period rather than only a single point estimate, which is useful for sensitivity checks before running the full <code>geolight_map_*</code> workflow.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure"><p><img src="assets/geolightviz-3.png" class="img-fluid figure-img" style="width:100.0%"></p>
 <figcaption><small><code>Likelihood Settings</code> modal with calibration diagnostics (<code>twl_calib_adjust</code>) and log-linear pooling controls for map aggregation.</small></figcaption></figure>
