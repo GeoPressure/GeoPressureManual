@@ -81,14 +81,7 @@ In addition to the two required wind variables, we also downloaded the temperatu
 
 ::: callout-tip
 
-In case you have a lot of tracks for which you need to download wind data and don't want to block your console, you might consider using an <a href="https://solutions.rstudio.com/r/jobs/" target="_blank">RStudio background job</a>, which can be easily called with the <a href="https://lindeloev.github.io/job/" target="_blank">job package</a>:
-
-```{r 05-wind-download-background-job} 
-#| eval: false
-job::job({
-  tag_download_wind(tag)
-})
-```
+If you have many tracks to download and do not want to block your console, you can run this step asynchronously in a separate R process. RStudio Jobs and packages such as `job` or `mirai` can help with this.
 
 :::
 

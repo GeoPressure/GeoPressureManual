@@ -96,19 +96,6 @@ references:
         orcid: https://orcid.org/0000-0002-8185-1020
     year: "2026"
   - type: software
-    title: job
-    abstract: "job: Run Code as an RStudio Job - Free Your Console"
-    notes: Imports
-    url: https://lindeloev.github.io/job/
-    repository: https://CRAN.R-project.org/package=job
-    authors:
-      - family-names: Lindeløv
-        given-names: Jonas Kristoffer
-        email: jonas@lindeloev.dk
-        orcid: https://orcid.org/0000-0003-4565-0595
-    year: "2026"
-    doi: 10.32614/CRAN.package.job
-  - type: software
     title: knitr
     abstract: "knitr: A General-Purpose Package for Dynamic Report Generation in R"
     notes: Imports
