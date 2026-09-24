@@ -29,6 +29,8 @@ geolightviz("data/twilight-label/18LX-labeled.csv") # the label file directly
 
 By default, the app starts in a background R process (`run_bg = TRUE`), so your console remains available.
 
+See [Map tiles](resources.html#map-tiles) to configure optional CARTO, Mapbox, or MapTiler basemaps.
+
 ## Label Twilight
 
 Start with twilight labelling before adjusting map or calibration settings.  

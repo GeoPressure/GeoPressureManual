@@ -22,6 +22,8 @@ geopressureviz(tag)
 geopressureviz("18LX")
 ```
 
+See [Map tiles](resources.html#map-tiles) to configure optional CARTO, Mapbox, or MapTiler basemaps.
+
 
 ## Navigate GeoPressureViz
 
