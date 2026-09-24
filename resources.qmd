@@ -28,6 +28,32 @@ Paper reviewing the strengths, limitations, and opportunities of geolocation by 
 
 > Raphaël Nussbaumer, Mathieu Gravey, Felix Liechti. Improving the spatial accuracy of multi-sensor geolocators' position using atmospheric surface pressure. October 2021. *7th International Bio-logging Science Symposium*. PRESENTATION available at [Youtube](https://www.youtube.com/watch?v=0JsYU_xfKN8) and as [PDF](http://dx.doi.org/10.13140/RG.2.2.13199.71843).
 
+## Map tiles
+
+Interactive GeoPressureR maps use a basemap to provide geographic context. GeoPressureViz,
+GeoLightViz, `plot()` maps, and `plot_path()` all show the same basemap selector.
+
+Esri's Gray Canvas, imagery, and topographic basemaps are always available. You can add CARTO,
+Mapbox, or MapTiler styles by storing a provider key once in your system keyring.
+
+```{r map-tiles-keyring}
+#| eval: false
+keyring::key_set_with_value("CARTO_API_KEY", password = "<your CARTO API key>")
+keyring::key_set_with_value("MAPBOX_ACCESS_TOKEN", password = "<your Mapbox token>")
+keyring::key_set_with_value("MAPTILER_API_KEY", password = "<your MapTiler API key>")
+```
+
+Only store a public, read-only Mapbox token: rendered Leaflet maps send map tokens to the web
+browser. Do not put keys in analysis scripts or commit them to version control. Create keys at
+[CARTO](https://carto.com/basemaps/apikey/),
+[Mapbox](https://docs.mapbox.com/help/getting-started/access-tokens/), or
+[MapTiler](https://www.maptiler.com/cloud/).
+
+Each configured provider adds useful styles to the selector: CARTO Dark Matter with and without
+labels; Mapbox Dark, Outdoors, Satellite, and Satellite Streets; and MapTiler DataViz Dark,
+Topographic, Satellite, and Hybrid. Choose a dark no-label layer for likelihood maps, a
+topographic layer for terrain context, and satellite or hybrid imagery for local detail.
+
 
 ## References
 

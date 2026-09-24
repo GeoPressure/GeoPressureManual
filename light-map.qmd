@@ -179,6 +179,8 @@ Finally, we can visualise the aggregated likelihood map for each stationary peri
 plot(tag, type = "map_light")
 ```
 
+See [Map tiles](resources.html#map-tiles) to configure the basemap selector used by this interactive map.
+
 
 ::: {.callout-warning style="margin-top: 20px;"}
 ## Light map vs pressure map?

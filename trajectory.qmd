@@ -132,6 +132,8 @@ knitr::kable(head(path_most_likely, 3))
 plot_path(path_most_likely)
 ```
 
+See [Map tiles](resources.html#map-tiles) to configure the basemap selector used by this interactive map.
+
 ### Product 2: Marginal probability map
 
 Estimating the uncertainty of the bird's position for each stationary period is generally the most sought-after output of tracking studies. While the pressure likelihood map provides some information for each stationary period, we can now produce the probability map of positions accounting for all observations and transitions. In the HMM, these maps correspond to the marginal distribution of a Markov process.
