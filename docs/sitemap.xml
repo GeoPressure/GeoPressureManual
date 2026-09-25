@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://geopressure.org/GeoPressureManual/index.html</loc>
-    <lastmod>2026-08-02T06:09:45.869Z</lastmod>
+    <lastmod>2026-09-25T09:36:27.460Z</lastmod>
   </url>
   <url>
     <loc>https://geopressure.org/GeoPressureManual/tag-object.html</loc>
@@ -14,15 +14,15 @@
   </url>
   <url>
     <loc>https://geopressure.org/GeoPressureManual/trajectory.html</loc>
-    <lastmod>2026-03-23T08:11:35.228Z</lastmod>
+    <lastmod>2026-09-02T09:17:46.279Z</lastmod>
   </url>
   <url>
     <loc>https://geopressure.org/GeoPressureManual/light-map.html</loc>
-    <lastmod>2026-08-02T05:51:52.678Z</lastmod>
+    <lastmod>2026-09-02T09:17:46.278Z</lastmod>
   </url>
   <url>
     <loc>https://geopressure.org/GeoPressureManual/trajectory-with-wind.html</loc>
-    <lastmod>2026-03-23T07:25:48.855Z</lastmod>
+    <lastmod>2026-09-01T07:54:21.568Z</lastmod>
   </url>
   <url>
     <loc>https://geopressure.org/GeoPressureManual/pressurepath.html</loc>
@@ -30,11 +30,11 @@
   </url>
   <url>
     <loc>https://geopressure.org/GeoPressureManual/geopressureviz.html</loc>
-    <lastmod>2026-03-19T19:56:25.875Z</lastmod>
+    <lastmod>2026-09-02T09:17:46.277Z</lastmod>
   </url>
   <url>
     <loc>https://geopressure.org/GeoPressureManual/geolightviz.html</loc>
-    <lastmod>2026-05-07T06:06:29.700Z</lastmod>
+    <lastmod>2026-09-02T09:17:46.278Z</lastmod>
   </url>
   <url>
     <loc>https://geopressure.org/GeoPressureManual/labelling-tracks.html</loc>
@@ -46,11 +46,11 @@
   </url>
   <url>
     <loc>https://geopressure.org/GeoPressureManual/geopressuretemplate-label.html</loc>
-    <lastmod>2026-08-02T06:17:47.964Z</lastmod>
+    <lastmod>2026-09-25T09:26:11.701Z</lastmod>
   </url>
   <url>
     <loc>https://geopressure.org/GeoPressureManual/geopressuretemplate-twilight.html</loc>
-    <lastmod>2026-08-02T06:17:48.027Z</lastmod>
+    <lastmod>2026-09-25T09:26:12.034Z</lastmod>
   </url>
   <url>
     <loc>https://geopressure.org/GeoPressureManual/geopressuretemplate-workflow.html</loc>
@@ -66,7 +66,7 @@
   </url>
   <url>
     <loc>https://geopressure.org/GeoPressureManual/resources.html</loc>
-    <lastmod>2026-03-02T10:50:10.696Z</lastmod>
+    <lastmod>2026-09-25T07:42:14.256Z</lastmod>
   </url>
   <url>
     <loc>https://geopressure.org/GeoPressureManual/probability-aggregation.html</loc>

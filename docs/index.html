@@ -399,7 +399,7 @@ cookieconsent.run({
   <ul class="collapse">
 <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
   <li><a href="#data-requirements" id="toc-data-requirements" class="nav-link" data-scroll-target="#data-requirements">Data requirements</a></li>
-  <li><a href="#the-geopressure-suite" id="toc-the-geopressure-suite" class="nav-link" data-scroll-target="#the-geopressure-suite">The GeoPressure suite</a></li>
+  <li><a href="#the-geopressure-ecosystem" id="toc-the-geopressure-ecosystem" class="nav-link" data-scroll-target="#the-geopressure-ecosystem">The GeoPressure ecosystem</a></li>
   <li><a href="#structure-of-the-manual" id="toc-structure-of-the-manual" class="nav-link" data-scroll-target="#structure-of-the-manual">Structure of the manual</a></li>
   <li><a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation">Installation</a></li>
   <li><a href="#how-to-cite" id="toc-how-to-cite" class="nav-link" data-scroll-target="#how-to-cite">How to cite?</a></li>
@@ -447,7 +447,7 @@ cookieconsent.run({
 <p>Determining the positions, and over time trajectories, of wildlife is crucial to apprehend ecological relationships in nature. Since satellite devices (e.g.&nbsp;GPS) are too heavy for most bird species, lightweight geolocators remain an essential tool to track bird movement.</p>
 <p>Geolocation by pressure provides an exciting opportunity to determine the position of birds with high precision using small tracking devices.</p>
 <p>Indeed, as atmospheric pressure varies in space and time, a timeseries of pressure measurement recorded at a single location constitutes a unique signature which can be used for global positioning.</p>
-<p>The GeoPressure suite helps users tackle the challenges of geolocation by pressure and provides a toolkit to implement two methods published in the following two papers:</p>
+<p>This manual uses GeoPressureR and related tools to apply two methods described in the following papers:</p>
 <ul>
 <li>
 <span class="citation" data-cites="Nussbaumer2023a">Nussbaumer, Gravey, Briedis, and Liechti (<a href="resources.html#ref-Nussbaumer2023a" role="doc-biblioref">2023</a>)</span> presents the method to estimate a map of likely positions from a pressure timeseries,</li>
@@ -474,33 +474,38 @@ cookieconsent.run({
 </ul>
 <p>GeoPressureR can currently read Swiss Ornithological Institute (SOI) files (<code>*.pressure</code>, <code>*.glf</code>, <code>*.acceleration</code>), Migrate Technology files (<code>*.deg</code> and <code>*.lux</code>) and Lund CAnMove (<code>*.xlsx</code>).</p>
 <p>Feel free to <a href="mailto:rafnuss@gmail.com">contact me</a> to discuss your data and study species.</p>
-</section><section id="the-geopressure-suite" class="level2"><h2 class="anchored" data-anchor-id="the-geopressure-suite">The GeoPressure suite</h2>
-<p>The GeoPressure suite includes several tools:</p>
+</section><section id="the-geopressure-ecosystem" class="level2"><h2 class="anchored" data-anchor-id="the-geopressure-ecosystem">The GeoPressure ecosystem</h2>
+<p><strong>Main analysis</strong></p>
+<p><a href="https://github.com/GeoPressure/GeoPressureR">GeoPressureR</a> provides the analysis functions used in this manual and three Shiny apps:</p>
 <ul>
 <li>
-<a href="https://github.com/GeoPressure/GeoPressureR">GeoPressureR</a> is the main R package with functions to run the analysis.</li>
+<a href="labelling-tracks.html">Trainset</a> labels pressure and acceleration data.</li>
 <li>
-<a href="index.html">GeoPressureManual</a> is the official user guide developed to help you learn to use GeoPressureR.</li>
+<a href="geopressureviz.html">GeoPressureViz</a> helps inspect trajectories and likelihood maps.</li>
 <li>
-<a href="https://github.com/GeoPressure/GeoPressureTemplate">GeoPressureTemplate</a> is a <a href="https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template">template Github repository</a> to help kickstart your project.</li>
+<a href="geolightviz.html">GeoLightViz</a> labels twilights and tunes light-based geolocation settings.</li>
+</ul>
+<p><a href="https://github.com/GeoPressure/GeoPressureTemplate">GeoPressureTemplate</a> provides a ready-made project structure.</p>
+<p><a href="https://github.com/GeoPressure/GeoPressureAPI">GeoPressureAPI</a> lets GeoPressureR compare tag pressure measurements with ERA5 data.</p>
+<p><strong>R package extensions</strong></p>
+<ul>
 <li>
-<a href="geopressureviz.html">GeoPressureViz</a> is a shiny app included in GeoPressureR to visualize the trajectory of your bird.</li>
+<a href="https://geopressure.org/GeoMagR/">GeoMagR</a> turns three-axis magnetic measurements into location likelihood maps that can be combined with pressure and light maps in GeoPressureR.</li>
 <li>
-<a href="geolightviz.html">GeoLightViz</a> is another shiny app included in GeoPressureR for labelling twilight data and tuning calibration settings.</li>
-<li>Trainset is yet another shiny app dedicated for the labeling of pressure and acceleration data.</li>
+<a href="https://github.com/GeoPressure/GeoPathSampleR">GeoPathSampleR</a> uses Gibbs sampling and movement priors to reconstruct trajectories from GeoPressureR likelihood maps, including light-only analyses.</li>
+</ul>
+<p><strong>Data sharing</strong></p>
+<ul>
 <li>
-<a href="https://github.com/GeoPressure/GeoLocatoR-dp">GeoLocator Data Package (DP)</a> is a data exchange format for geolocator data.</li>
+<a href="https://github.com/GeoPressure/GeoLocator-DP">GeoLocator Data Package (DP)</a> defines a standard format for sharing geolocator data.</li>
 <li>
-<a href="https://geopressure.org/GeoLocatoR/">GeoLocatoR</a> is an R package designed to handle GeoLocator Data Packages.</li>
+<a href="https://geopressure.org/GeoLocatoR/">GeoLocatoR</a> is an R package for creating and reading these data packages.</li>
 <li>
-<a href="https://geopressure.org/GeoLocatorExplorer/">GeoLocatorExplorer</a> is a web app to explore geolocator data packages.</li>
-<li>
-<a href="https://chatgpt.com/g/g-6888c9afb4348191b6134fcfc19232d8-geopressuregpt">GeoPressureGPT</a> is a ChatGPT plugin that allows you to ask any questions in the chat interface.</li>
-<li>
-<a href="https://geopressure.org/GeoMagR/">GeoMagR</a> is an R package extending GeoPressureR using 3 axis magnetic data to improve geolocation.</li>
-<li>
-<a href="https://github.com/GeoPressure/GeoPressureAPI">GeoPressureAPI</a> is the JSON API used by GeoPressureR under the hood to query the ERA5 reanalysis data with Google Earth Engine.</li>
-</ul></section><section id="structure-of-the-manual" class="level2"><h2 class="anchored" data-anchor-id="structure-of-the-manual">Structure of the manual</h2>
+<a href="https://geopressure.org/GeoLocatorExplorer/">GeoLocatorExplorer</a> is a website for visualizing and exploring published data packages.</li>
+</ul>
+<p><strong>Project and community</strong></p>
+<p>Explore the project on the <a href="https://geopressure.org/">GeoPressure website</a>, browse its repositories on <a href="https://github.com/GeoPressure">GitHub</a>, or ask questions on the <a href="https://geopressure.discourse.group">GeoPressure forum</a>.</p>
+</section><section id="structure-of-the-manual" class="level2"><h2 class="anchored" data-anchor-id="structure-of-the-manual">Structure of the manual</h2>
 <p>This manual includes five parts:</p>
 <ul>
 <li>

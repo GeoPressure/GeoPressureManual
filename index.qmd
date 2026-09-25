@@ -6,7 +6,7 @@ Geolocation by pressure provides an exciting opportunity to determine the positi
 
 Indeed, as atmospheric pressure varies in space and time, a timeseries of pressure measurement recorded at a single location constitutes a unique signature which can be used for global positioning.
 
-The GeoPressure suite helps users tackle the challenges of geolocation by pressure and provides a toolkit to implement two methods published in the following two papers:
+This manual uses GeoPressureR and related tools to apply two methods described in the following papers:
 
 - @Nussbaumer2023a presents the method to estimate a map of likely positions from a pressure timeseries,
 - @Nussbaumer2023b describes a new approach to reconstruct the full trajectory of a bird quickly and accurately, using pressure and wind data.
@@ -38,22 +38,34 @@ GeoPressureR can currently read Swiss Ornithological Institute (SOI) files (`*.p
 
 Feel free to [contact me](mailto:rafnuss@gmail.com) to discuss your data and study species.
 
-## The GeoPressure suite
+## The GeoPressure ecosystem
 
-The GeoPressure suite includes several tools:
+**Main analysis**
 
-- [GeoPressureR](https://github.com/GeoPressure/GeoPressureR) is the main R package with functions to run the analysis.
-- [GeoPressureManual](index.html) is the official user guide developed to help you learn to use GeoPressureR.
-- [GeoPressureTemplate](https://github.com/GeoPressure/GeoPressureTemplate) is a [template Github repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template) to help kickstart your project.
-- [GeoPressureViz](geopressureviz.html) is a shiny app included in GeoPressureR to visualize the trajectory of your bird.
-- [GeoLightViz](geolightviz.html) is another shiny app included in GeoPressureR for labelling twilight data and tuning calibration settings.
-- Trainset is yet another shiny app dedicated for the labeling of pressure and acceleration data.
-- [GeoLocator Data Package (DP)](https://github.com/GeoPressure/GeoLocatoR-dp) is a data exchange format for geolocator data.
-- [GeoLocatoR](https://geopressure.org/GeoLocatoR/) is an R package designed to handle GeoLocator Data Packages.
-- [GeoLocatorExplorer](https://geopressure.org/GeoLocatorExplorer/) is a web app to explore geolocator data packages.
-- [GeoPressureGPT](https://chatgpt.com/g/g-6888c9afb4348191b6134fcfc19232d8-geopressuregpt) is a ChatGPT plugin that allows you to ask any questions in the chat interface.
-- [GeoMagR](https://geopressure.org/GeoMagR/) is an R package extending GeoPressureR using 3 axis magnetic data to improve geolocation.
-- [GeoPressureAPI](https://github.com/GeoPressure/GeoPressureAPI) is the JSON API used by GeoPressureR under the hood to query the ERA5 reanalysis data with Google Earth Engine.
+[GeoPressureR](https://github.com/GeoPressure/GeoPressureR) provides the analysis functions used in this manual and three Shiny apps:
+
+- [Trainset](labelling-tracks.html) labels pressure and acceleration data.
+- [GeoPressureViz](geopressureviz.html) helps inspect trajectories and likelihood maps.
+- [GeoLightViz](geolightviz.html) labels twilights and tunes light-based geolocation settings.
+
+[GeoPressureTemplate](https://github.com/GeoPressure/GeoPressureTemplate) provides a ready-made project structure.
+
+[GeoPressureAPI](https://github.com/GeoPressure/GeoPressureAPI) lets GeoPressureR compare tag pressure measurements with ERA5 data.
+
+**R package extensions**
+
+- [GeoMagR](https://geopressure.org/GeoMagR/) turns three-axis magnetic measurements into location likelihood maps that can be combined with pressure and light maps in GeoPressureR.
+- [GeoPathSampleR](https://github.com/GeoPressure/GeoPathSampleR) uses Gibbs sampling and movement priors to reconstruct trajectories from GeoPressureR likelihood maps, including light-only analyses.
+
+**Data sharing**
+
+- [GeoLocator Data Package (DP)](https://github.com/GeoPressure/GeoLocator-DP) defines a standard format for sharing geolocator data.
+- [GeoLocatoR](https://geopressure.org/GeoLocatoR/) is an R package for creating and reading these data packages.
+- [GeoLocatorExplorer](https://geopressure.org/GeoLocatorExplorer/) is a website for visualizing and exploring published data packages.
+
+**Project and community**
+
+Explore the project on the [GeoPressure website](https://geopressure.org/), browse its repositories on [GitHub](https://github.com/GeoPressure), or ask questions on the [GeoPressure forum](https://geopressure.discourse.group).
 
 ## Structure of the manual
 
@@ -66,7 +78,6 @@ This manual includes five parts:
 - [GeoLocator Data Package](geolocator-create.html) is a data exchange format for geolocator data. In this part, you'll learn how to use the GeoLocatoR package to create a GeoLocator data package.
 
 Feel free to read through the manual, or to [fork the repository](https://github.com/GeoPressure/GeoPressureManual/fork) to run the examples at your own pace.
-
 
 ## Installation
 
