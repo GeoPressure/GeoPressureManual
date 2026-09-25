@@ -1,8 +1,8 @@
 # Resources
 
-## Mailing list
+## Forum
 
-If you are actively using the package, we recommand subscribing to the [mailing list](https://groups.google.com/g/geopressurer/) to be aware of bugs, issue and improvements. 
+If you are actively using the package, join the [GeoPressure forum](https://geopressure.discourse.group) to stay informed about bugs, issues, and improvements.
 
 ## Main Publications
 
