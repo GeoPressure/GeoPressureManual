@@ -3,7 +3,7 @@ aliases:
   - geolocator-intro.html
 ---
 
-# Create
+# Publish your data
 
 This tutorial explains how to create a GeoLocator Data Package (GeoLocator DP) from a GeoPressureTemplate project, upload it to Zenodo, and validate the draft before publication.
 

@@ -65,6 +65,7 @@ book:
       chapters:
         - geolocator-create.qmd
         - geolocator-read.qmd
+        - geolocator-master.qmd
 
   appendices:
     - resources.qmd

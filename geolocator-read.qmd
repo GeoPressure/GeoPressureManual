@@ -1,279 +1,149 @@
-# Read and use
+# Reuse a study
 
-This tutorial shows how to discover, load, combine, and analyze published GeoLocator Data Packages.
+A published GeoLocator Data Package contains everything a study produced: the tags, the raw measurements, the labels and the trajectories of all its birds. This chapter shows how to find a package, read it, join its tables, and bring a tag back into GeoPressureR. We use the [South African Woodland Kingfisher](https://doi.org/10.5281/zenodo.13829929) study as an example. To compare many studies, see [Compare studies with the Master](geolocator-master.qmd).
 
 ```{r 16-setup}
 #| message: false
-#| code-fold: true
 library(GeoLocatoR)
 library(GeoPressureR)
-library(dplyr)
-library(ggplot2)
-library(lubridate)
-library(stringr)
-
-theme_geolocator_modern <- function(base_size = 12) {
-  theme_minimal(base_size = base_size) +
-    theme(
-      plot.title.position = "plot",
-      plot.title = element_text(
-        face = "bold",
-        size = base_size + 2,
-        color = "#0f172a"
-      ),
-      plot.subtitle = element_text(size = base_size, color = "#475569"),
-      axis.title = element_text(color = "#334155"),
-      axis.text = element_text(color = "#475569"),
-      panel.grid.minor = element_blank(),
-      panel.grid.major = element_line(color = "#e2e8f0", linewidth = 0.35),
-      panel.background = element_rect(fill = "#fcfdff", color = NA),
-      plot.background = element_rect(fill = "white", color = NA),
-      strip.background = element_rect(fill = "#f1f5f9", color = NA),
-      strip.text = element_text(face = "bold", color = "#334155"),
-      legend.title = element_text(face = "bold", color = "#0f172a"),
-      legend.text = element_text(color = "#334155")
-    )
-}
+library(tidyverse)
+theme_set(theme_minimal(base_size = 12) + theme(panel.grid.minor = element_blank()))
 ```
 
-## Discover datasets with GeoLocatorExplorer
+## Find a dataset
 
-Use the interactive [GeoLocatorExplorer](https://geopressure.org/GeoLocatorExplorer/) to find datasets you're interested in.
+Browse published packages with the [GeoLocatorExplorer](https://geopressure.org/GeoLocatorExplorer/), or directly in the [geolocator-dp Zenodo community](https://zenodo.org/communities/geolocator-dp).
 
-![<small>GeoLocatorExplorer interface to browse published geolocator data packages.</small>](assets/geolocatorexplorer.png){width="100%" alt="Screenshot of GeoLocatorExplorer showing searchable geolocator data packages"}
+[![<small>GeoLocatorExplorer interface to browse published geolocator data packages.</small>](assets/geolocatorexplorer.png){width="100%" alt="Screenshot of GeoLocatorExplorer showing searchable geolocator data packages"}](https://geopressure.org/GeoLocatorExplorer/)
 
+## Read a package
 
-## Read one GeoLocator Data Package
-
-Records can be loaded using the Zenodo record id, DOI, DOI URL, or Zenodo record URL. This will automatically download the data, upgrade if necessary and load the data in your R console. 
+`read_zenodo()` takes a Zenodo record id, a DOI or a Zenodo URL. It downloads the files, upgrades the package to the latest GeoLocator DP version if needed, and returns a `geolocatordp` object.
 
 ```{r 16-read-gldp}
-#| collapse: true
+#| message: false
 #| cache: true
-pkg <- read_zenodo("https://zenodo.org/records/13829929")
+pkg <- read_zenodo("13829929")
+```
 
+```{r 16-print-gldp}
+#| collapse: true
 print(pkg)
+```
 
+```{r 16-plot-map}
 plot(pkg, "map")
 ```
 
-A GeoLocator DP object gives direct access to tabular resources through accessor functions: `tags()`, `observations()`, `measurements()`, `staps()`, `paths()`, `edges()`, `twilights()`, and `pressurepaths()`. 
+Each table has an accessor returning a tibble: `tags()`, `observations()`, `measurements()`, `staps()`, `paths()`, `edges()`, `twilights()` and `pressurepaths()`. Their content is described in [Publish your data](geolocator-create.qmd) and on the [GeoLocator DP website](https://geopressure.org/GeoLocator-DP/).
 
-For instance, the following code computes the uncertainty in total distance flown for each bird (expressed as a percentage across simulations):
+## Keys and joins
 
-```{r 16-access-tables}
-dist_sim <- edges(pkg) |>
-  filter(type == "simulation") |>
-  group_by(tag_id, j) |>
-  summarise(total_distance = sum(distance), .groups = "drop")
+The tables of a package are linked by keys, like a relational database. The [schema overview](https://geopressure.org/GeoLocator-DP/schema-overview/) draws them all.
 
-dist_sim |>
-  group_by(tag_id) |>
-  summarise(
-    uncertainty_pct = 100 * sd(total_distance) / mean(total_distance),
-    .groups = "drop"
-  ) |>
-  rename(`Distance uncertainty (%)` = uncertainty_pct) |>
+- A **primary key** identifies each row. In `staps`, it is the pair `tag_id` and `stap_id`: stationary period 3 only means something for a given tag.
+- A **foreign key** points to the primary key of another table. `paths` and `edges` point to `staps`, and all tables point to `tags` through `tag_id`.
+
+The trajectory tables add two columns to their primary key:
+
+| Table | Primary key |
+|---|---|
+| `paths` | `tag_id`, `type`, `j`, `stap_id` |
+| `edges` | `tag_id`, `type`, `j`, `stap_s` |
+| `pressurepaths` | `tag_id`, `type`, `j`, `datetime` |
+
+`type` is either `most_likely`, the single best trajectory (`j = 1`), or `simulation`, random draws from the posterior distribution (`j = 1` to `nj`) that carry the location uncertainty. **Always join trajectory tables on `type` and `j`**, or you will mix trajectories.
+
+In dplyr, a join takes the keys in `by`. When the columns have different names, `join_by()` maps them. For example, to get the position where each flight started, join `edges` to `paths` on the departure stationary period `stap_s`:
+
+```{r 16-join}
+edges(pkg) |>
+  left_join(paths(pkg), by = join_by(tag_id, type, j, stap_s == stap_id)) |>
+  select(tag_id, type, j, stap_s, stap_t, lat, lon, distance) |>
+  head() |>
   knitr::kable(digits = 1)
 ```
 
+The same keys tell you how to aggregate. The total distance flown is a sum over the flights of **one** trajectory, so we group by `tag_id`, `type` and `j`, then summarise the simulations of each tag:
 
-## Merge multiple packages
-
-You can combine two geolocator-dp objects with `merge_gldp()`. To make it easier, we can use `purrr` to read and combine a list of zenodo record_id into a single geolocator-dp object:
-
-```{r 16-read-gldp-second}
-#| message: false
-#| cache: true
-pkgs <- c("16730669", "17084708", "18311204", "13829929", "16804931") |>
-  purrr::map(read_zenodo) |>
-  purrr::reduce(merge_gldp)
+```{r 16-distance}
+edges(pkg) |>
+  summarise(km = sum(distance), .by = c(tag_id, type, j)) |>
+  summarise(
+    most_likely = km[type == "most_likely"],
+    median = median(km[type == "simulation"]),
+    lower = quantile(km[type == "simulation"], 0.05),
+    upper = quantile(km[type == "simulation"], 0.95),
+    .by = tag_id
+  ) |>
+  knitr::kable(digits = 0, col.names = c("Tag", "Most likely (km)", "Simulations (km)", "5%", "95%"))
 ```
 
-::: callout-important
-`merge_gldp()` returns a valid `geolocator-dp`, but it should be interpreted as a compiled object built from multiple source packages.
+The most likely trajectory is shorter than every simulation: it is the best position at each stationary period, so it smooths out the zig-zags that the simulations draw within the location uncertainty. Use the simulations for quantities summed along a trajectory.
 
-1. Tabular resources are merged by row.
-2. Package-level metadata is merged with dedicated rules: some fields are combined (e.g., `contributors`), recomputed (e.g., `taxonomic`), while other are dropped (e.g., `id`).
-3. `tags()` becomes the key provenance table: each tag has a `datapackage_id` that identifies its source datapackage.
-4. A new table `pkgs$datapackages` is introduced and stores one row per source datapackage with compact provenance metadata and summary counts.
-:::
+## Compare the birds of a study
 
-## Showcase analysis: migration performance and wind support
+Because all tags share the same tables, figures across birds are a few joins away. Here, the latitude of each bird through the year, expanded to one value per day from its stationary periods, with the 90% interval of the simulations:
 
-This first example is a compact demonstration of table manipulation from a single resource (`edges()`), including data extract, filtering and mutation while asking a basic ecological question: "Are flights longer when wind support is better?"
-
-```{r 16-build-edge-metrics}
-#| code-fold: true
-#| fig-width: 14
-#| fig-height: 10
-edge_metrics <- edges(pkgs) %>%
-  filter(type == "most_likely") %>%
-  left_join(tags(pkgs), by = "tag_id") %>%
-  mutate(
-    facet_label = paste0(
-      str_replace_all(scientific_name, "\\b(\\w{1,3})\\w*", "\\1"),
-      " (",
-      tag_id,
-      ")"
-    ),
-    duration_h = stap2duration(.),
-    groundspeed = sqrt(gs_u^2 + gs_v^2),
-    windspeed = sqrt(ws_u^2 + ws_v^2),
-    wind_support = (gs_u * ws_u + gs_v * ws_v) / pmax(windspeed, 1e-6)
-  ) %>%
-  filter(!is.na(wind_support))
-
-edge_metrics %>%
-  ggplot(
-    aes(
-      x = distance,
-      y = groundspeed,
-      color = wind_support,
-      size = duration_h
-    )
-  ) +
-  geom_point(alpha = 0.72) +
-  geom_smooth(
-    aes(x = distance, y = groundspeed),
-    method = "lm",
-    se = FALSE,
-    color = "#111827",
-    linewidth = 0.55,
-    inherit.aes = FALSE
-  ) +
-  facet_wrap(~facet_label, ncol = 8) +
-  scale_color_gradient2(
-    low = "#2563eb",
-    mid = "#e2e8f0",
-    high = "#dc2626",
-    midpoint = 0,
-    name = "Wind support\n(m/s)"
-  ) +
-  scale_size(range = c(1.2, 4.8), name = "Duration (h)") +
-  labs(
-    title = "Migration legs: distance, speed, and wind support",
-    subtitle = "Flights tend to be longer and faster under stronger tailwind support",
-    x = "Leg distance (km)",
-    y = "Groundspeed (m/s)"
-  ) +
-  theme_geolocator_modern(base_size = 11) +
-  theme(
-    panel.spacing = grid::unit(0.55, "lines"),
-    strip.text = element_text(size = 9),
-    legend.position = "right"
-  )
+```{r 16-daily-latitude}
+latitude <- paths(pkg) |>
+  summarise(
+    lower = quantile(lat[type == "simulation"], 0.05),
+    upper = quantile(lat[type == "simulation"], 0.95),
+    lat = lat[type == "most_likely"],
+    .by = c(tag_id, stap_id)
+  ) |>
+  inner_join(staps(pkg), by = c("tag_id", "stap_id")) |>
+  reframe(
+    date = seq(as.Date(start), as.Date(end), by = "day"),
+    .by = c(tag_id, stap_id, lat, lower, upper)
+  ) |>
+  distinct(tag_id, date, .keep_all = TRUE)
 ```
 
-Across individuals, warmer colors (positive wind support) concentrate on larger/faster legs, showing that birds generally fly longer when wind support is better.
-
-## Showcase analysis: latitude seasonality from staps
-
-This second example demonstrates combining multiple resources with joins and filtering with the question of synchroneity of migration timing across different flyways crossing path in Southern Africa (< -4°).
-
-```{r 16-build-daily-latitude}
+```{r 16-daily-latitude-plot}
 #| code-fold: true
-#| fig-width: 13
-#| fig-height: 8
-south_tag_ids <- paths(pkgs) %>%
-  filter(type == "most_likely", !is.na(lat)) %>%
-  group_by(tag_id) %>%
-  summarize(min_lat = min(lat, na.rm = TRUE), .groups = "drop") %>%
-  filter(min_lat <= -4) %>%
-  pull(tag_id)
-
-daily_latitude <- paths(pkgs) %>%
-  filter(type == "most_likely", tag_id %in% south_tag_ids) %>%
-  select(tag_id, stap_id, lat) %>%
-  inner_join(
-    staps(pkgs) %>% select(tag_id, stap_id, start, end),
-    by = c("tag_id", "stap_id")
-  ) %>%
-  inner_join(
-    tags(pkgs) %>% select(tag_id, scientific_name),
-    by = "tag_id"
-  ) %>%
-  mutate(
-    scientific_name = coalesce(scientific_name, "Unknown species"),
-    start_day = as.Date(start, tz = "UTC"),
-    end_day = as.Date(end - lubridate::seconds(1), tz = "UTC"),
-    end_day = if_else(end_day < start_day, start_day, end_day)
-  ) %>%
-  mutate(date = purrr::map2(start_day, end_day, ~ seq(.x, .y, by = "day"))) %>%
-  tidyr::unnest(date) %>%
-  arrange(tag_id, date, stap_id) %>%
-  distinct(tag_id, date, .keep_all = TRUE) %>%
-  group_by(tag_id) %>%
-  mutate(
-    doy_norm = yday(date),
-    new_segment = row_number() == 1L |
-      doy_norm < lag(doy_norm, default = first(doy_norm)),
-    segment_id = cumsum(new_segment)
-  ) %>%
-  ungroup()
-
-species_levels <- daily_latitude %>%
-  distinct(scientific_name) %>%
-  arrange(scientific_name) %>%
-  pull(scientific_name)
-
-species_palette <- setNames(
-  grDevices::hcl.colors(length(species_levels), palette = "Dark 3"),
-  species_levels
-)
-
-daily_latitude %>%
-  ggplot(
-    aes(
-      x = doy_norm,
-      y = lat,
-      color = scientific_name,
-      group = interaction(tag_id, segment_id, drop = TRUE)
-    )
-  ) +
-  geom_hline(
-    yintercept = 0,
-    color = "#94a3b8",
-    linewidth = 0.4,
-    linetype = "dashed"
-  ) +
-  geom_line(alpha = 0.62, linewidth = 0.9, lineend = "round") +
-  scale_color_manual(values = species_palette) +
+#| fig-height: 4.5
+latitude |>
+  mutate(doy = yday(date), year = year(date)) |>
+  ggplot(aes(doy, group = interaction(tag_id, year), colour = tag_id, fill = tag_id)) +
+  geom_hline(yintercept = 0, colour = "grey60", linetype = "dashed") +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.15, colour = NA) +
+  geom_line(aes(y = lat), linewidth = 0.8) +
   scale_x_continuous(
-    limits = c(1, 366),
     breaks = c(1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335),
-    labels = month.abb,
-    expand = expansion(mult = c(0.01, 0.01))
+    labels = month.abb, expand = expansion(mult = 0.01)
   ) +
+  scale_colour_brewer(palette = "Dark2", aesthetics = c("colour", "fill")) +
   labs(
-    title = "Latitude by normalized day of year",
-    subtitle = "Most-likely paths reaching south of -4 degrees latitude; expanded to one position per day from staps",
-    x = "Normalized day of year",
-    y = "Latitude (degrees)",
-    color = "Scientific name"
+    x = NULL, y = "Latitude", colour = "Tag", fill = "Tag",
+    title = "Woodland Kingfishers spend the austral winter north of the equator"
   ) +
-  guides(
-    color = guide_legend(
-      nrow = 2,
-      byrow = TRUE,
-      override.aes = list(alpha = 1, linewidth = 2)
-    )
-  ) +
-  theme_geolocator_modern(base_size = 12) +
-  theme(
-    legend.position = "bottom",
-    legend.title.position = "top",
-    legend.box = "horizontal"
-  )
+  theme(legend.position = "bottom", plot.title.position = "plot", plot.title = element_text(face = "bold"))
 ```
 
-This seasonal plot highlights strong synchronicity in migration timing across distinct African flyways, and reveals two autumn migration windows that can extend into early January.
+All five birds leave South Africa between late March and mid-April, spend the austral winter around 8–11°N, and are back by early December.
 
-## Reuse in GeoPressureTemplate
+## Back to GeoPressureR
 
-If a package has not yet been analysed with GeoPressureR, you can bootstrap a GeoPressureTemplate project from it.
+A package keeps the raw measurements and the labels of the original analysis. `gldp_to_tag()` converts them into a GeoPressureR [tag object](tag-object.qmd), with its labelled pressure, its stationary periods and its twilights:
+
+```{r 16-gldp-to-tag}
+#| message: false
+#| warning: false
+tag <- gldp_to_tag(pkg, tag_id = "16LP")
+tag
+```
+
+From here, the tag works with every chapter of this manual. For instance, you can recompute its [pressure map](pressure-map.qmd) with different settings, add a [light map](light-map.qmd), or build a [trajectory with wind](trajectory-with-wind.qmd). Without `tag_id`, `gldp_to_tag()` returns a named list with one tag per bird.
+
+To re-run the whole study, `create_geopressuretemplate()` creates a [GeoPressureTemplate](geopressuretemplate-intro.qmd) project with the data, labels and parameters of all tags:
 
 ```{r 16-create-template-from-pkg}
 #| eval: false
-create_geopressuretemplate(path = "~/Documents/woodlandkingfisher", pkg = pkg)
+create_geopressuretemplate(path = "~/woodlandkingfisher", pkg = pkg)
 ```
+
+## Compare studies
+
+To compare studies, do not download and merge packages yourself: the **Master GeoLocator Data Package** already compiles them all into one versioned dataset. See [Compare studies with the Master](geolocator-master.qmd).

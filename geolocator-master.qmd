@@ -1,0 +1,411 @@
+# Compare studies with the Master
+
+A single GeoLocator Data Package describes one study (see [Reuse a study](geolocator-read.qmd)). The **Master GeoLocator Data Package** compiles every published package of the [geolocator-dp Zenodo community](https://zenodo.org/communities/geolocator-dp) into one standardised dataset, released once a year with its own DOI. It is the starting point for questions that no single study can answer.
+
+The first part of this chapter shows how to read the Master, choose source packages and select birds. The second part uses it to describe how songbirds and other small migrants stop, fly, and use the wind, across all tracked species.
+
+```{r 17-setup}
+#| message: false
+library(GeoLocatoR)
+library(tidyverse)
+options(knitr.kable.NA = "")
+```
+
+```{r 17-theme}
+#| code-fold: true
+#| code-summary: "Plot theme"
+theme_set(
+  theme_minimal(base_size = 12) +
+    theme(
+      panel.grid.minor = element_blank(),
+      plot.title.position = "plot",
+      plot.title = element_text(face = "bold"),
+      legend.position = "bottom",
+      legend.text = element_text(size = 8),
+      legend.key.size = unit(0.4, "cm")
+    )
+)
+```
+
+## Get started
+
+### Read and save a release
+
+Each release has a **version DOI**, the one to read and cite, and all releases share a **concept DOI** ([10.5281/zenodo.18187092](https://doi.org/10.5281/zenodo.18187092)) that always resolves to the latest one. The download is about 1 GB, mostly the in-flight `pressurepaths`.
+
+```{r 17-read-master}
+#| cache: true
+#| message: false
+master <- read_zenodo("18187093")
+```
+
+Download it once and write it to disk with `write_gldp()`. Later sessions read the local copy with `read_gldp()`, which is much faster and works offline:
+
+```{r 17-write-master}
+#| eval: false
+write_gldp(master, "data/master_2026.0")
+master <- read_gldp("data/master_2026.0")
+```
+
+The Master has the same tables as any GeoLocator DP, but no `measurements`: it holds trajectories, not raw sensor data. It adds a catalogue of its source packages in `master$datapackages`, with one row per package.
+
+### Choose the source packages
+
+The catalogue describes each package: its access status, species, number of tracked birds, sensors and their sampling intervals, and whether its trajectories were computed with wind. It lists **every** package of the community, including embargoed ones, whose data will join the public tables once their embargo ends.
+
+```{r 17-catalogue}
+catalogue <- master$datapackages |>
+  mutate(
+    project = str_remove(title, "^Geo[Ll]ocator Data Package: "),
+    pressure_min = map_dbl(str_split(samplingInterval_pressure_min, "; "), \(x) max(as.numeric(x)))
+  )
+```
+
+```{r 17-catalogue-table}
+#| code-fold: true
+catalogue |>
+  arrange(access_status, desc(numberTags_paths)) |>
+  select(project, access_status, numberTags_paths, pressure_min, trajectories_with_wind_pct) |>
+  knitr::kable(col.names = c("Project", "Access", "Trajectories", "Pressure interval (min)", "With wind (%)"))
+```
+
+Filter the catalogue like any tibble. For a study of flight behaviour, you may want open packages with high-resolution pressure and trajectories computed with wind:
+
+```{r 17-filter-catalogue}
+selected <- catalogue |>
+  filter(access_status == "open", pressure_min <= 5, trajectories_with_wind_pct == 100)
+```
+
+Other useful filters include the time span (`temporal_start`, `temporal_end`), the sensors (`numberTags_light`, `numberTags_activity`, …), or the authors (`str_detect(contributors, "Hahn")`).
+
+Each tag knows its source package through `tags()$datapackage_id`. `select_gldp()` then keeps the rows of the chosen tags in every table:
+
+```{r 17-select-datapackage}
+#| message: false
+hires <- tags(master) |>
+  filter(datapackage_id %in% selected$datapackage_id) |>
+  pull(tag_id) |>
+  select_gldp(pkg = master)
+```
+
+This keeps `r nrow(semi_join(tags(hires), paths(hires), by = "tag_id"))` trajectories from `r nrow(selected)` packages.
+
+### Select birds by what they did
+
+The selection can come from any table. For instance, all birds that spent more than a month in the Sahel, the semi-arid belt south of the Sahara:
+
+```{r 17-select-sahel}
+#| message: false
+sahel <- staps(master) |>
+  filter(as.numeric(difftime(end, start, units = "days")) > 30) |>
+  inner_join(filter(paths(master), type == "most_likely"), by = c("tag_id", "stap_id")) |>
+  filter(between(lat, 10, 18), between(lon, -18, 40)) |>
+  distinct(tag_id) |>
+  pull(tag_id) |>
+  select_gldp(pkg = master)
+```
+
+`master$species` holds the [AviList](https://www.avilist.org/) taxonomy of every species of the Master, which gives English names and a taxonomic order:
+
+```{r 17-species}
+species <- bind_rows(master$species) |>
+  select(scientific_name = scientific_name_input, species = English_name_AviList, Sequence)
+```
+
+```{r 17-sahel-map}
+#| code-fold: true
+#| fig-height: 7
+paths(sahel) |>
+  filter(type == "most_likely") |>
+  left_join(tags(sahel), by = "tag_id") |>
+  left_join(species, by = "scientific_name") |>
+  mutate(species = fct_infreq(species)) |>
+  ggplot(aes(lon, lat)) +
+  annotation_borders("world", fill = "grey95", colour = "grey75", linewidth = 0.2) +
+  annotate("rect", xmin = -18, xmax = 40, ymin = 10, ymax = 18, fill = NA, colour = "black", linetype = "dashed") +
+  geom_path(aes(group = tag_id, colour = species), alpha = 0.5, linewidth = 0.4) +
+  scale_colour_manual(values = hcl.colors(15, "Dark 3"), guide = guide_legend(ncol = 3, override.aes = list(alpha = 1, linewidth = 1))) +
+  coord_quickmap(xlim = c(-20, 45), ylim = c(-30, 62)) +
+  labs(x = NULL, y = NULL, colour = NULL, title = paste(nrow(tags(sahel)), "birds spent the non-breeding season in the Sahel"))
+```
+
+Migrants breeding from Iberia to Scandinavia and Eastern Europe share the Sahel: the Great Reed Warbler and the Common Hoopoe are the most tracked, but also wheatears, shrikes, nightingales and pipits.
+
+The catalogue still lists every package of the Master. The datasets to cite with your results are those the selected birds come from:
+
+```{r 17-cite}
+sahel$datapackages |>
+  semi_join(tags(sahel), by = "datapackage_id") |>
+  transmute(citation = str_squish(bibliographicCitation), licenses) |>
+  knitr::kable(col.names = c("Cite", "Licence"))
+```
+
+### Back to the source package
+
+The Master contains no raw measurements. To go back to the data of a bird, for instance to re-run its analysis with `gldp_to_tag()`, follow its `datapackage_id` and read the source package as described in [Reuse a study](geolocator-read.qmd):
+
+```{r 17-source}
+#| eval: false
+doi <- tags(master) |>
+  filter(tag_id == "16LP") |>
+  pull(datapackage_id)
+
+pkg <- read_zenodo(doi)
+```
+
+::: callout-tip
+## Build your own compilation
+`merge_gldp()` combines any GeoLocator DPs into one, with the same `datapackages` catalogue as the Master. Use it to add packages that are not in the Master yet, such as embargoed data you have access to:
+
+```{r 17-merge}
+#| eval: false
+pkgs <- c("13829929", "16730669") |>
+  purrr::map(read_zenodo) |>
+  purrr::reduce(merge_gldp)
+```
+:::
+
+## Migration across species
+
+With all studies in one dataset, we can describe migration across species: how long birds stop, how long, when, how fast and how high they fly.
+
+Projects differ in how many birds they tracked, for how long, and how often their tags sampled. A distribution over all flights would be dominated by the best-sampled projects. In the figures below, **each bird weighs the same**: its stops or flights get a weight of one over their number. Colours show the share of each species.
+
+We keep birds with a trajectory of species with at least five of them, ordered by taxonomy.
+
+```{r 17-birds}
+birds <- tags(master) |>
+  semi_join(paths(master), by = "tag_id") |>
+  left_join(species, by = "scientific_name") |>
+  filter(n() >= 5, .by = species) |>
+  mutate(species = fct_reorder(species, Sequence)) |>
+  select(tag_id, species)
+```
+
+```{r 17-palette}
+#| code-fold: true
+#| code-summary: "Species colours"
+species_scale <- scale_fill_manual(
+  values = setNames(hcl.colors(nlevels(birds$species), "Dark 3"), levels(birds$species)),
+  name = NULL,
+  guide = guide_legend(ncol = 4)
+)
+
+# Stacked density where each bird weighs the same (requires a `w` column)
+plot_birds <- function(data, x, bw = "nrd0") {
+  ggplot(data, aes({{ x }}, weight = w, fill = species)) +
+    geom_density(aes(y = after_stat(wdensity)), position = "stack", bw = bw, colour = "white", linewidth = 0.1) +
+    species_scale +
+    labs(y = NULL) +
+    theme(axis.text.y = element_blank(), panel.grid.major.y = element_blank())
+}
+```
+
+That leaves `r nrow(birds)` birds of `r nlevels(birds$species)` species.
+
+### How long do they stop?
+
+A trajectory alternates stationary periods (`staps`) and flights (`edges`). We drop the first and last stationary period of each track, which are cut by the tag deployment and retrieval, and keep those of the most likely trajectory.
+
+```{r 17-stays}
+stays <- staps(master) |>
+  inner_join(birds, by = "tag_id") |>
+  semi_join(filter(paths(master), type == "most_likely"), by = c("tag_id", "stap_id")) |>
+  filter(stap_id > min(stap_id), stap_id < max(stap_id), .by = tag_id) |>
+  mutate(days = as.numeric(difftime(end, start, units = "days")), w = 1 / n(), .by = tag_id)
+```
+
+```{r 17-stays-plot}
+#| code-fold: true
+#| fig-height: 5.5
+plot_birds(stays, days, bw = 0.1) +
+  geom_vline(xintercept = 14, linetype = "dashed") +
+  scale_x_log10(
+    breaks = c(0.25, 1, 7, 14, 60, 180),
+    labels = c("6 h", "1 day", "1 week", "2 weeks", "2 months", "6 months")
+  ) +
+  labs(x = "Duration of stationary periods", title = "Most stops last a single day")
+```
+
+Durations span three orders of magnitude. Half of the stops last less than `r round(median(stays$days) * 24)` hours: the bird lands at dawn and leaves the following night. Stays of several weeks or months (right of the dashed line, two weeks) mark the non-breeding grounds and major staging sites.
+
+### How long do they fly?
+
+Each row of `edges` is a flight between two stationary periods. Flights with `n > 1` span short stops that could not be located, so we keep single flights (`n == 1`). Flights with zero distance join two stationary periods in the same grid cell: they are local movements rather than migratory flights.
+
+```{r 17-flights}
+flights <- edges(master) |>
+  filter(type == "most_likely", n == 1, distance > 0) |>
+  inner_join(birds, by = "tag_id") |>
+  mutate(w = 1 / n(), .by = tag_id)
+```
+
+```{r 17-flights-plot}
+#| code-fold: true
+#| fig-height: 5.5
+plot_birds(flights, flight_duration_h, bw = 0.07) +
+  scale_x_log10(breaks = c(1, 2, 4, 8, 12, 24, 48)) +
+  labs(x = "Flight duration (h)", title = "Most flights end before dawn")
+```
+
+The median flight lasts `r round(median(flights$flight_duration_h), 1)` hours, and most stop at dawn, after 8 to 10 hours. Flights beyond 12 hours are non-stop crossings of the Sahara or the sea, continuing through the day.
+
+### When do they fly?
+
+We place every 10 minutes of each flight on the local solar time, using the mean longitude of the flight (one hour per 15° of longitude), and weight them so that each bird's flight time adds up to the same total.
+
+```{r 17-airborne}
+airborne <- flights |>
+  reframe(time = seq(start, end, by = "10 min"), .by = c(tag_id, species, stap_s, lon_s, lon_t)) |>
+  mutate(
+    solar_hour = (hour(time) + minute(time) / 60 + (lon_s + lon_t) / 2 / 15) %% 24,
+    w = 1 / n(),
+    .by = tag_id
+  ) |>
+  mutate(w = w / sum(w))
+```
+
+```{r 17-airborne-plot}
+#| code-fold: true
+#| fig-height: 5.5
+# shift the hours to [12, 36) so that the night is in the middle
+ggplot(airborne, aes((solar_hour - 12) %% 24 + 12, weight = w, fill = species)) +
+  annotate("rect", xmin = 18, xmax = 30, ymin = -Inf, ymax = Inf, fill = "grey92") +
+  geom_histogram(binwidth = 0.5, boundary = 0) +
+  species_scale +
+  scale_x_continuous(breaks = seq(12, 36, 3), labels = \(x) sprintf("%02d:00", x %% 24), expand = expansion(0)) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Local solar time", y = "Share of flight time", title = "Migration happens at night") +
+  theme(plot.margin = margin(5.5, 20, 5.5, 5.5))
+```
+
+`r scales::percent(sum(airborne$w[airborne$solar_hour >= 18 | airborne$solar_hour < 6]))` of the flight time falls between 18:00 and 06:00 solar time. What remains during the day are mostly the end of the longest flights.
+
+Departure time is better measured from the actual sunset. The `twilights` table holds the sunrises and sunsets measured by each tag's light sensor, at the bird's own location. A rolling join with `join_by(closest())` finds the last sunset before each departure:
+
+```{r 17-departure}
+sunsets <- twilights(master) |>
+  filter(!rise, is.na(label) | label != "discard") |>
+  select(tag_id, sunset = twilight)
+
+departures <- flights |>
+  inner_join(sunsets, by = join_by(tag_id, closest(start >= sunset))) |>
+  # wrap to [-12, 12] h so that departures just before sunset are negative
+  mutate(after_sunset = (as.numeric(difftime(start, sunset, units = "hours")) + 12) %% 24 - 12) |>
+  mutate(w = 1 / n(), .by = tag_id)
+```
+
+```{r 17-departure-plot}
+#| code-fold: true
+#| fig-height: 5.5
+plot_birds(departures, after_sunset, bw = 0.15) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  scale_x_continuous(breaks = seq(-12, 12, 2)) +
+  coord_cartesian(xlim = c(-4, 10)) +
+  labs(x = "Departure (hours after sunset)", title = "Birds take off soon after sunset")
+```
+
+Half of the departures happen within `r round(median(departures$after_sunset), 1)` hours of sunset. Species without twilights in the Master are missing from this figure.
+
+### How fast do they fly?
+
+`edges` store the bird's ground velocity (`gs_u`, `gs_v`) and the ERA5 wind it experienced (`ws_u`, `ws_v`), as eastward and northward components in km/h. The difference is the **airspeed**, the speed of the bird relative to the air, and the **wind support** is the wind component along the direction of travel. Wind is only available for trajectories computed with a wind model.
+
+```{r 17-speed}
+flights <- flights |>
+  mutate(
+    ground_speed = sqrt(gs_u^2 + gs_v^2),
+    air_speed = sqrt((gs_u - ws_u)^2 + (gs_v - ws_v)^2),
+    wind_support = (ws_u * gs_u + ws_v * gs_v) / ground_speed
+  )
+
+fit <- lm(ground_speed ~ wind_support, data = flights)
+```
+
+```{r 17-speed-plot}
+#| code-fold: true
+#| fig-height: 5.5
+flights |>
+  filter(!is.na(wind_support)) |>
+  ggplot(aes(wind_support, ground_speed)) +
+  geom_point(aes(colour = species), alpha = 0.25, size = 0.6) +
+  geom_abline(intercept = coef(fit)[1], slope = coef(fit)[2], linewidth = 0.8) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  scale_colour_manual(
+    values = setNames(hcl.colors(nlevels(birds$species), "Dark 3"), levels(birds$species)),
+    name = NULL, guide = guide_legend(ncol = 4, override.aes = list(alpha = 1, size = 2))
+  ) +
+  coord_cartesian(xlim = c(-60, 80), ylim = c(0, 150)) +
+  labs(x = "Wind support (km/h)", y = "Ground speed (km/h)", title = "Tailwinds make birds faster")
+```
+
+Birds fly at a median airspeed of `r round(median(flights$air_speed, na.rm = TRUE))` km/h. `r scales::percent(mean(flights$wind_support > 0, na.rm = TRUE))` of the flights had a tailwind, and each km/h of wind support adds `r round(coef(fit)[["wind_support"]], 2)` km/h to the ground speed. Birds barely lower their airspeed when the wind helps them: they simply travel faster.
+
+### How high do they fly?
+
+The pressure sensor that locates a bird on the ground also gives its altitude in flight. `pressurepaths` follow the most likely trajectory at the tag's sampling interval. Flight samples are the rows with a fractional `stap_id`, between `stap_s` and `stap_s + 1`. We drop samples labelled `discard` and summarise each flight by its median and maximum altitude.
+
+```{r 17-altitude}
+#| cache: true
+#| dependson: "17-read-master"
+altitude <- pressurepaths(master) |>
+  filter(type == "most_likely", stap_id %% 1 != 0, !is.na(altitude), is.na(label) | label != "discard") |>
+  inner_join(birds, by = "tag_id") |>
+  mutate(stap_s = floor(stap_id)) |>
+  summarise(max_altitude = max(altitude), altitude = median(altitude), .by = c(species, tag_id, stap_s)) |>
+  mutate(w = 1 / n(), .by = tag_id)
+```
+
+```{r 17-altitude-plot}
+#| code-fold: true
+#| fig-height: 5.5
+plot_birds(altitude, altitude) +
+  scale_x_continuous(labels = scales::label_comma(suffix = " m")) +
+  coord_cartesian(xlim = c(0, 5000)) +
+  labs(x = "Median altitude of each flight (above sea level)", title = "Most flights cruise between a few hundred and 2,000 m")
+```
+
+The median flight cruises at `r scales::comma(median(altitude$altitude), accuracy = 10)` m, and the highest point of half of the flights is above `r scales::comma(median(altitude$max_altitude), accuracy = 10)` m. Altitudes are above sea level, not above ground: a bird crossing a high plateau flies high without climbing much.
+
+### Species profiles
+
+To compare species, we summarise each bird first, then take the median across the birds of each species.
+
+```{r 17-profile}
+per_bird <- list(
+  stays |>
+    summarise(stopover_d = median(days[days < 14]), .by = c(species, tag_id)),
+  flights |>
+    summarise(
+      flight_h = median(flight_duration_h),
+      longest_h = max(flight_duration_h),
+      air_speed = median(air_speed, na.rm = TRUE),
+      .by = c(species, tag_id)
+    ),
+  departures |>
+    summarise(after_sunset_h = median(after_sunset), .by = c(species, tag_id)),
+  altitude |>
+    summarise(altitude = median(altitude), max_altitude = max(max_altitude), .by = c(species, tag_id))
+) |>
+  reduce(full_join, by = c("species", "tag_id"))
+```
+
+```{r 17-profile-table}
+#| code-fold: true
+per_bird |>
+  summarise(birds = n(), across(-tag_id, \(x) median(x, na.rm = TRUE)), .by = species) |>
+  arrange(species) |>
+  knitr::kable(
+    digits = 1,
+    col.names = c(
+      "Species", "Birds", "Stopover (d)", "Flight (h)", "Longest flight (h)",
+      "Airspeed (km/h)", "Departure after sunset (h)", "Altitude (m)", "Max altitude (m)"
+    )
+  )
+```
+
+Empty cells are species whose projects have no wind model, no twilights or no `pressurepaths` in the Master.
+
+## Cite the data
+
+Cite the **Master release** you used and the **source packages** that contributed the birds of your analysis (see [Select birds by what they did](#select-birds-by-what-they-did)). Most packages are under CC BY 4.0. If your results rely on a few projects, contact their authors: they know their data best.
