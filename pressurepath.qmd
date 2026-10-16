@@ -223,7 +223,7 @@ plotly::layout(plotly::ggplotly(p), legend = list(orientation = "h"))
 
 ## Retrieve ERA5 variables and sunrise along path
 
-`pressurepath_create()` can also be used to retrieve other ERA5 variables along a path, such as temperature, cloud cover, and precipitation. This retrieves data from both [ERA5-single-levels](https://doi.org/10.24381/cds.adbb2d47) and [ERA5-LAND](https://doi.org/10.24381/cds.e2161bac) datasets. Use `GeoPressureR:::pressurepath_variable` to list all the variables available. In addition, `pressurepath_create()` also computes the local sunrise and sunset time along the path using `path2twilight()`.  
+`pressurepath_create()` can also be used to retrieve other ERA5 variables along a path, such as temperature and precipitation. This retrieves data from both [ERA5-single-levels](https://doi.org/10.24381/cds.adbb2d47) and [ERA5-LAND](https://doi.org/10.24381/cds.e2161bac) datasets. Use `pressurepath_variable_available()` to list the variables available for each data source. In addition, `pressurepath_create()` also computes the local sunrise and sunset time along the path using `path2twilight()`.  
 
 
 ```{r 06-pressurepath-advanced-create}
@@ -238,9 +238,7 @@ pressurepath_2_to_5 <- pressurepath_create(
     "altitude",
     "surface_pressure",
     "temperature_2m",
-    "total_cloud_cover",
-    "total_precipitation",
-    "land_sea_mask"
+    "total_precipitation"
   ),
   solar_dep = -6,
   quiet = TRUE
