@@ -11,7 +11,7 @@ GeoPressureTemplate/
 ├── DESCRIPTION                             # Project metadata and dependencies
 ├── README.md                               # Top-level description of content and guide to users
 ├── GeoPressureTemplate.Rproj               # R project file
-├── LICENCE.md                             # Conditions of re/use the data and code
+├── LICENSE.md                              # Conditions of re/use the data and code
 ├── config.yml                              # YML file used to define the parameters used in the analysis
 ├── data/                                 
 │   ├── raw-tag/                            # Raw geolocator data (do not modify!)
