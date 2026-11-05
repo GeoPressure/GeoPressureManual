@@ -41,7 +41,7 @@ The `geopressuretemplate()` function calls on three child functions outlined bel
 
 **3.`geopressuretemplate_pressurepath()`**
 
-Compute pressurepath [`pressurepath_create()`](https://geopressure.org/GeoPressureR/reference/pressurepath_create) of the `path_most_likely` and/or the `path_geopressureviz`. Learn more about pressurepath in the [Pressurepath](pressurepath.html) chapter.
+Compute pressurepath [`pressurepath_create()`](https://geopressure.org/GeoPressureR/reference/pressurepath_create) of `path_most_likely`, `path_simulation`, `path_geopressureviz` and/or `path_tag`. A path edited in GeoPressureViz is read from the CSV exported by the app (`data/interim/{id}-path-geopressureviz.csv`). Learn more about pressurepath in the [Pressurepath](pressurepath.html) chapter.
 
 ## Configuration the workflow
 
@@ -63,7 +63,7 @@ default:
     pressurepath: ["most_likely"]
 ```
 
-`likelihood` define which likelihood map to compute and use in the graph model while `outputs` define which outputs to use. In `pressurepath`, you need to set which path to use. The path can also be visualised using [GeoPressureViz](geopressureviz.html).
+`likelihood` define which likelihood map to compute and use in the graph model while `outputs` define which outputs to use. In `pressurepath`, you need to set which path to use (`"most_likely"`, `"simulation"`, `"geopressureviz"` or `"tag"`). The path can also be visualised using [GeoPressureViz](geopressureviz.html).
 
 
 You can check the configuration used with:
