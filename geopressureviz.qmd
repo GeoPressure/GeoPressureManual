@@ -50,4 +50,4 @@ See [Map tiles](resources.html#map-tiles) to configure optional CARTO, Mapbox, o
 
 8.  Finally, you can also check the pressure timeseries with the new positions using the button "Query pressure". This runs `geopressure_timeseries()` in the background, so it is slow (especially for long stationary periods).
 
-To keep the edited path, click on "Export CSV" and save the file as `data/interim/{id}-path-geopressureviz.csv` (e.g., `data/interim/18LX-path-geopressureviz.csv`). You can read it back with `read_stap()`, and `geopressuretemplate_pressurepath()` uses it when `"geopressureviz"` is listed in `pressurepath` (see [Workflow](geopressuretemplate-workflow.html)).
+To keep the edited path, click on "Export CSV". You can read it back with `read_stap()` and, if needed, compute its pressurepath with `pressurepath_create(tag, path)`.
