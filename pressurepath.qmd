@@ -75,8 +75,6 @@ pressurepath <- pressurepath_create(
 )
 ```
 
-Note that if a position on the path is over water, it is automatically moved to the closest point onshore as we use ERA5 Land.
-
 ```{r 06-pressurepath-plot}
 plot_pressurepath(pressurepath)
 ```
