@@ -91,24 +91,24 @@ write.csv(
 
 ### GeoPressureR maps
 
-GeoPressureR `maps` can be exported in a `.geotiff` file using `terra::writeRaster` after you convert them to a `terra::rast` using `rast.map()`.
+GeoPressureR `maps` can be exported in a `.geotiff` file using `terra::writeRaster` after you convert them to a `terra::rast` using `terra::rast()`.
 
 ```{r visuals-export-maps}
 #| warning: false
 terra::writeRaster(
-  rast.map(tag$map_pressure),
+  terra::rast(tag$map_pressure),
   glue::glue("./data/processed/{tag$param$id}/map_pressure.tif"),
   filetype = "GTiff",
   overwrite = TRUE
 )
 terra::writeRaster(
-  rast.map(tag$map_light),
+  terra::rast(tag$map_light),
   glue::glue("./data/processed/{tag$param$id}/map_light.tif"),
   filetype = "GTiff",
   overwrite = TRUE
 )
 terra::writeRaster(
-  rast.map(marginal),
+  terra::rast(marginal),
   glue::glue("./data/processed/{tag$param$id}/map_marginal.tif"),
   filetype = "GTiff",
   overwrite = TRUE
@@ -227,7 +227,7 @@ p0 <- get_googlemap(
 #| warning: false
 
 # Convert to data.frame
-df <- rast.map(marginal)[[istap_winter]] |>
+df <- terra::rast(marginal)[[istap_winter]] |>
   terra::disagg(5, method = "bilinear") |>
   as.data.frame(xy = TRUE)
 names(df)[3] <- "layer"
