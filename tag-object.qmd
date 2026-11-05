@@ -58,9 +58,9 @@ Open the shiny app with the function `trainset()`, this will open your browser w
 trainset(tag)
 ```
 
-Instructions on how to label the file can be found in the dedicated chapter [Labelling tracks](labelling-tracks.html). Once you have finished, click on "save" which will create the label as `csv` file in the folder `/data/tag-label/CB619-labeled.csv`.
+Instructions on how to label the file can be found in the dedicated chapter [Labelling tracks](labelling-tracks.html). Once you have finished, click on "Save" which will create the label as `csv` file in the folder `/data/tag-label/CB619-labeled.csv`.
 
-![<small>TRAINSET interface for manual tag labelling. See [Labelling tracks](labelling-tracks.html) for details.</small>](assets/labelling-tracks-0.png){width="100%" alt="Screenshot of TRAINSET showing manual geolocator tag labelling with activity and pressure plots"}
+![<small>Trainset interface for manual tag labelling. See [Labelling tracks](labelling-tracks.html) for details.</small>](assets/labelling-tracks-01.png){width="100%" alt="Screenshot of the Trainset Shiny app showing labelled pressure and acceleration timeseries"}
 
 ### Read labelled file
 

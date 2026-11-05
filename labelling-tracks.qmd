@@ -47,7 +47,7 @@ Start labeling using the `trainset()` function:
 
 ```{r 08-labelling-process-pseudo-code} 
 #| eval: false
-trainset("data/tag-label/18LX-label.csv")
+trainset("data/tag-label/18LX-labeled.csv")
 
 # or using a tag obeject
 trainset(tag)
@@ -61,15 +61,6 @@ trainset(tag)
 - **Keyboard shortcuts** can considerably speed up navigation. Click the info button for more information.
 - Use the information from **both timeseries** (pressure and acceleration) at the same time to help you determine what the bird might be doing.
 - **Adapt the y-axis range** to see the small (but essential) pressure variations which are not visible in the full view.
-
-
-::: callout-note
-## Why TRAINSET?
-
-<a href="https://trainset.raphaelnussbaumer.com/" target="_blank">TRAINSET</a> was the original web platform used for labelling. It was built as a customization of the <a href="https://trainset.geocene.com/" target="_blank">Geocene TRAINSET app</a>, a web-based tool for time-series annotation.
-
-The legacy website is still online, but it is now deprecated. We recommend using the `trainset()` Shiny app integrated in `GeoPressureR` (from v3.5.0), which is better maintained and fits the GeoPressure workflow more directly.
-:::
 
 
 ## Elevation period
