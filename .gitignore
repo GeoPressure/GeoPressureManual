@@ -42,9 +42,9 @@ _main.Rmd
 # nc file too large
 *.nc
 
-# site
-# Only use when updating the website
-# docs/
+# site: built by GitHub Actions from _freeze/
+docs/
+/*_files/
 
 data/interim/*
 data/processed/18LX/*

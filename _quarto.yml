@@ -1,7 +1,10 @@
 project:
   type: book
   output-dir: docs
-  pre-render: R/getGeoPressureTemplateQmd.R
+  pre-render: R/pre-render.ts
+
+execute:
+  freeze: auto
 
 book:
   title: "A User Manual for GeoPressureR"
