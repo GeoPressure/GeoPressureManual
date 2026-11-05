@@ -14,26 +14,26 @@ GeoPressureTemplate/
 ├── LICENCE.md                             # Conditions of re/use the data and code
 ├── config.yml                              # YML file used to define the parameters used in the analysis
 ├── data/                                 
-│   ├── raw_tag/                            # Raw geolocator data (do not modify!)
+│   ├── raw-tag/                            # Raw geolocator data (do not modify!)
 │   │   ├── 18LX/
 │   │   │   ├── 18LX_20180725.acceleration
 │   │   │   ├── 18LX_20180725.glf
 │   │   │   └── 18LX_20180725.pressure 
 │   │   └── CB619/ 
 │   │       └── CB619.deg
-│   ├── tag_label/                          # Trainset csv file generated with analysis/1-label.qmd
+│   ├── tag-label/                          # Label csv files generated with trainset() in analysis/1-label.qmd
 │   │   ├── 18LX-labeled.csv
 │   │   ├── 18LX.csv 
 │   │   ├── CB619-labeled.csv
 │   │   └── CB619.csv            
-│   ├── twilight_label/                     # Trainset csv file generated with analysis/2-twilight.qmd
+│   ├── twilight-label/                     # Label csv files generated with geolightviz() in analysis/2-twilight.qmd
 │   │   ├── 18LX-labeled.csv
 │   │   └── 18LX.csv
-│   ├── wind/                               # ERA-5 wind data generated with analysis/3-wind.qmd
+│   ├── wind/                               # ERA-5 wind data downloaded with tag_download_wind()
 │   │   └── 18LX/
 │   │       ├── 18LX_1.nc
 │   │       └── ...
-│   └── interim/                            # Intermediate data created with analysis/4-geopressuretemplate.R
+│   └── interim/                            # Intermediate data created with analysis/10-geopressuretemplate.R
 │       └── 18LX.RData                      
 ├── analysis/                               # R scripts used to analyse your data.
 │   ├── 1-label.qmd
@@ -161,7 +161,7 @@ The `geopressuretemplate()` function allows you to run the entire GeoPressureR w
 geopressuretemplate("18LX")
 ```
 
-This creates `data/interim/18LX.RData` with all the trajectory outputs. You'll learn more in the [Workflow chapter](geopressuretemplate-workflow.html). In GeoPressureTemplate, this is performed in the file `analysis/4-geopressuretemplate.R`.
+This creates `data/interim/18LX.RData` with all the trajectory outputs. You'll learn more in the [Workflow chapter](geopressuretemplate-workflow.html). In GeoPressureTemplate, this is performed in the file `analysis/10-geopressuretemplate.R`.
 
 ### Step 3: Your own analysis
 
@@ -180,7 +180,7 @@ Simply publish your GeoPressureTemplate Github repository on Zenodo following [t
 
 While publishing your GeoPressureTemplate on Zenodo is a great step to allow others to see (and, if needed, reproduce) your work, it can be a challenge to re-use your track data for other purposes. To facilitate this, we created [GeoLocator Data Package](https://geopressure.org/GeoLocator-DP/), a data exchange format for geolocator data, providing all GeoPressureR outputs in csv files. The aim of GeoLocator DP is re-usability rather than reproduction. 
 
-This step is performed with the script `analysis/5-datapackage.R`. To learn more about publishing a GeoLocator Data Package, go to [GeoLocator DP](geolocator-intro.html).
+This step is performed with the script `analysis/20-datapackage.R`. To learn more about publishing a GeoLocator Data Package, go to [GeoLocator DP](geolocator-create.html).
 
 
 ## 🔗 Advanced options

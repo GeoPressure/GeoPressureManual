@@ -34,7 +34,7 @@ The only strict requirement is that your geolocator provides a continuous timese
 - Light data can accelerate building the trajectory model by allowing to quickly narrow down possible locations during short stationary periods. Generally, for species with few long stopover, light data brings limited benefit, but it can be quite helpful for species with multiple short stopovers, and particularly if migrating on a east/west trajectory.
 - Knowing the equipment and retrieval sites can also be helpful, but it also works well without it.
 
-GeoPressureR can currently read Swiss Ornithological Institute (SOI) files (`*.pressure`, `*.glf`, `*.acceleration`), Migrate Technology files (`*.deg` and `*.lux`) and Lund CAnMove (`*.xlsx`).
+GeoPressureR can currently read Swiss Ornithological Institute (SOI) files (`*.pressure`, `*.glf`, `*.acceleration`, ...), Migrate Technology files (`*.deg` and `*.lux`), Lund CAnMove (`*.xlsx`), PresTag (`*.txt`) and British Antarctic Survey (`*.lig`) files, as well as any data provided as tables (see `tag_create()`).
 
 Feel free to [contact me](mailto:rafnuss@gmail.com) to discuss your data and study species.
 
