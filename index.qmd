@@ -24,6 +24,7 @@ GeoPressureR is an R package, and this manual assumes basic knowledge of R.
 - We recommend using [Positron](https://positron.posit.co/download.html) or [RStudio Desktop](https://posit.co/download/rstudio-desktop/) as your editor/IDE.
 - An internet connection is required to download ERA5 pressure data during the modelling workflow.
 - For trajectory modelling, a computer with 8-16 GB RAM is highly recommended. It can also run on 4 GB RAM, but computations will usually be slower and may require reducing model size.
+- Optional: an AI assistant can guide you through the analysis. See [Use with an AI assistant](resources.html#use-with-an-ai-assistant).
 
 ## Data requirements
 

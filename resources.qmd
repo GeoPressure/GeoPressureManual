@@ -28,7 +28,86 @@ Paper reviewing the strengths, limitations, and opportunities of geolocation by 
 
 > Raphaël Nussbaumer, Mathieu Gravey, Felix Liechti. Improving the spatial accuracy of multi-sensor geolocators' position using atmospheric surface pressure. October 2021. *7th International Bio-logging Science Symposium*. PRESENTATION available at [Youtube](https://www.youtube.com/watch?v=0JsYU_xfKN8) and as [PDF](http://dx.doi.org/10.13140/RG.2.2.13199.71843).
 
-## Map tiles
+## Use with an AI assistant
+
+An AI assistant can guide you through a GeoPressureR analysis, answer questions about the code and
+the method, and help you share or reuse data. The **geopressure** skill, from
+[GeoPressureSkills](https://github.com/GeoPressure/GeoPressureSkills), tells the assistant where
+each kind of answer lives (this manual, the function reference, the papers, the forum) and how to
+work with you.
+
+- **Claude Code** (the command-line tool, or the Code tab of the Claude desktop app) can run R on
+  your computer, so it can set up a GeoPressureTemplate project and run the analysis with you:
+
+  ```
+  /plugin marketplace add GeoPressure/GeoPressureSkills
+  /plugin install geopressure@geopressure
+  ```
+
+- **Claude.ai or the Claude desktop chat:** download `geopressure.zip` from the
+  [latest release](https://github.com/GeoPressure/GeoPressureSkills/releases/latest) and upload it
+  at [claude.ai/customize/skills](https://claude.ai/customize/skills) (**+**, **Create skill**,
+  **Upload a skill**). Without R, the assistant answers questions and writes scripts for you to run.
+- **Other assistants** that read skills: copy the `plugins/geopressure/skills/geopressure` folder
+  to the folder your assistant reads skills from.
+
+Projects created from GeoPressureTemplate also include an `AGENTS.md` file, which guides any
+assistant through the analysis, with or without the skill.
+
+You stay in charge of the judgement calls: the assistant prepares and checks, but you label the
+flights in `trainset()` and decide on the settings. Check its results as you would a colleague's,
+and never paste a key or password into the chat (see below).
+
+## Accounts and keys
+
+Most of a GeoPressureR analysis needs no account. Pressure maps and ERA5 time series are computed
+through the GeoPressure API, which is free and needs no key. A few steps need your own account:
+
+| Account | Needed for | Required? |
+|---|---|---|
+| [Copernicus Climate Data Store](https://cds.climate.copernicus.eu) (ECMWF) | Downloading wind with `tag_download_wind()`. When a key is stored, `geopressure_timeseries()` and `pressurepath_create()` also read ERA5 from ECMWF's ARCO service instead of the GeoPressure API (see their `source` argument). | Only for wind |
+| [Zenodo](https://zenodo.org) | Publishing a GeoLocator Data Package, and checking a draft with `GeoLocatoR::read_zenodo(draft = TRUE)` | Only to publish |
+| [GitHub](https://github.com) | Creating a project with "Use this template" and archiving your code on Zenodo. `GeoLocatoR::create_geopressuretemplate()` needs git installed, but no account. | Optional |
+| CARTO, Mapbox, MapTiler | More basemap styles in the interactive maps | Optional |
+
+Keys are personal. Store each one once in your system keyring, as shown below, so that it never
+appears in a script, in `config.yml` or in a repository. Do not paste a key into a chat or share it
+with an AI assistant: run the commands yourself. `keyring::key_list()` lists the stored services
+without showing the keys.
+
+### Copernicus Climate Data Store
+
+1. Create an ECMWF account on the [Climate Data Store](https://cds.climate.copernicus.eu).
+2. Accept the "Licence to use Copernicus Products" in the
+   [Licences tab of the ERA5 pressure levels dataset](https://cds.climate.copernicus.eu/datasets/reanalysis-era5-pressure-levels?tab=download#manage-licences).
+   Requests fail until the licence is accepted.
+3. Copy your Personal Access Token from your [profile page](https://cds.climate.copernicus.eu/profile).
+4. Store it with `ecmwfr`, which calls it a key:
+
+```{r accounts-cds-key}
+#| eval: false
+ecmwfr::wf_set_key("<your personal access token>")
+```
+
+GeoPressureR then finds the key by itself. The CDS limits how many requests each account can have
+queued; see [Trajectory with wind](trajectory-with-wind.html) for downloading wind.
+
+### Zenodo
+
+1. Create a [Zenodo](https://zenodo.org) account. You can sign in with ORCID or GitHub.
+2. Create a personal access token in your
+   [Zenodo token settings](https://zenodo.org/account/settings/applications/tokens/new/).
+3. Store it in the keyring. `key_set()` asks for the token, so it is not saved in your R history:
+
+```{r accounts-zenodo-token}
+#| eval: false
+keyring::key_set("ZENODO_TOKEN")
+```
+
+`read_zenodo()` also reads the token from a `ZENODO_TOKEN` environment variable. See
+[Publish your data](geolocator-create.html) for the publishing steps.
+
+### Map tiles
 
 Interactive GeoPressureR maps use a basemap to provide geographic context. GeoPressureViz,
 GeoLightViz, `plot()` maps, and `plot_path()` all show the same basemap selector.
