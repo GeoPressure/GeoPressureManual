@@ -237,7 +237,11 @@ Each row of `edges` is a flight between two stationary periods. Flights with `n 
 flights <- edges(master) |>
   filter(type == "most_likely", n == 1, distance > 0) |>
   inner_join(birds, by = "tag_id") |>
-  mutate(w = 1 / n(), .by = tag_id)
+  mutate(
+    flight_duration_h = as.numeric(difftime(end, start, units = "hours")),
+    w = 1 / n(),
+    .by = tag_id
+  )
 ```
 
 ```{r 17-flights-plot}
