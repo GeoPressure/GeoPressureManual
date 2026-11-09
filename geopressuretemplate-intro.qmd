@@ -18,7 +18,8 @@ GeoPressureTemplate/
 │   │   ├── 18LX/
 │   │   │   ├── 18LX_20180725.acceleration
 │   │   │   ├── 18LX_20180725.glf
-│   │   │   └── 18LX_20180725.pressure 
+│   │   │   ├── 18LX_20180725.pressure
+│   │   │   └── 18LX_20180725.settings
 │   │   └── CB619/ 
 │   │       └── CB619.deg
 │   ├── tag-label/                          # Label csv files generated with trainset() in analysis/1-label.qmd
@@ -35,16 +36,12 @@ GeoPressureTemplate/
 │   │       └── ...
 │   └── interim/                            # Intermediate data created with analysis/10-geopressuretemplate.R
 │       └── 18LX.RData                      
-├── analysis/                               # R scripts used to analyse your data.
-│   ├── 1-label.qmd
-│   ├── 2-twilight.qmd
-│   ├── 3-label-advanced.qmd
-│   ├── 10-geopressuretemplate.R
-│   └── 20-datapackage.R
-├── R/                                      # Custom R functions used in your analysis.
-└── output/   
-    ├── create_figures.R
-    └── figures/
+└── analysis/                               # R scripts used to analyse your data.
+    ├── 1-label.qmd
+    ├── 2-twilight.qmd
+    ├── 3-label-advanced.qmd
+    ├── 10-geopressuretemplate.R
+    └── 20-datapackage.R
 ```
 
 ## 💡 Get started
@@ -104,20 +101,20 @@ An important benefit of `config` is its ability to manage hierarchical configura
 
 ``` yml
 default:
-  tag_create:
+  tag_set_map:
     extent: [-16, 23, 0, 50] # [W, E, S, N]
     scale: 1
 
 18LX:
   tag_set_map:
-    scale: 5
+    scale: 4
 ```
 
 ``` r
-config::get("tag_create", "18LX")$extent
+config::get("tag_set_map", "18LX")$extent
 # [-16, 23, 0, 50] # Returns the default value if not set in 18LX
 config::get("tag_set_map", "18LX")$scale
-# 5 # Return the value in 18LX if presents in both
+# 4 # Return the value in 18LX if presents in both
 ```
 
 ## 📈 Analyse the data
@@ -126,14 +123,14 @@ Now that you're set up, it's time to get serious 😬.
 
 ### Step 1: Preparation
 
-Here we make sure everything is ready to run the model. This mainly involves defining the parameters in `config.yml` by running the following three scripts:
+Here we make sure everything is ready to run the model. This mainly involves defining the parameters in `config.yml` by running the following two scripts:
 
 In this part, we will be presented step by step how to analyse your data:
 
 1. Run [`analysis/1-label.qmd`](geopressuretemplate-label.html).
 2. Run [`analysis/2-twilight.qmd`](geopressuretemplate-twilight.html), if you have light data.
 
-You can visualize each of the scripts in a nice-to-read HTML format, using the example of 16LX, in the next sections of this manual.
+You can visualize each of the scripts in a nice-to-read HTML format, using the example of 18LX, in the next sections of this manual.
 
 ::: callout-note
 When running the scripts, please keep in mind:

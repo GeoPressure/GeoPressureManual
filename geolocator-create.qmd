@@ -39,7 +39,7 @@ pkg <- read_geopressuretemplate()
 
 By default, `read_geopressuretemplate()` reads `data/interim/*.RData` first and falls back to raw data for tags without interim files.
 
-- Use `from` to force a specific source (`"interim"` or `"raw"`).
+- Use `from` to force a specific source (`"interim"` or `"raw-tag"`).
 - Prefix a file/folder with `_` to exclude a tag temporarily.
 
 Inspect the package summary:

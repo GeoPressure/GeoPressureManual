@@ -19,7 +19,7 @@ load_interim("18LX")
 
 Before creating a full `pressurepath`, we start with the basic building block of a pressurepath, which is to retrieve the pressure timeseries from ERA5 at a single location with `geopressure_timeseries`.
 
-`geopressure_timeseries` relies on the <a href="https://geopressure.org/GeoPressureAPI/#pressure-timeseries" target="_blank">pressure timeseries entry point of GeoPressureAPI</a> which return the timeseries of pressure at a given latitude and longitude.
+`geopressure_timeseries` returns the timeseries of pressure at a given latitude and longitude. By default (`source = "auto"`), it reads ECMWF's ARCO archive when an ECMWF key is set with `ecmwfr::wf_set_key()`, and otherwise uses the <a href="https://geopressure.org/GeoPressureAPI/#pressure-timeseries" target="_blank">pressure timeseries entry point of GeoPressureAPI</a>.
 
 Let's start by retrieving the pressure at the known site of equipment, querying the same date as the first stationary period.
 
@@ -88,7 +88,7 @@ plot_pressurepath(pressurepath, type = "altitude")
 ```
 
 ::: callout-note
-## Why use GeoPressureAPI for altitude?
+## How is altitude corrected?
 
 Computing the bird altitude $z_{gl}$ from its pressure measurement $P_{gl}$ is best performed with the [barometric equation](https://en.wikipedia.org/wiki/Barometric_formula)
 
@@ -112,9 +112,9 @@ pressurepath$altitude_uncorrected <- T0 /
 
 However, we know that pressure and temperature vary considerably over time and space, leading to approximation in the altitude estimated.
 
-Using GeoPressureAPI, we can adjust the barometric equation with the actual ground-level pressure $P_{ERA}$ and ground temperature $T_{ERA}$ retrieved from ERA5 at the bird's location $x$, $$ z_{gl}(x)=z_{ERA5}(x) + \frac{T_{ERA5}(x)}{L_b} \left[\left( \frac{P_{gl}}{P_{ERA5}(x)} \right) ^{-\frac{RL_b}{g M}}-1\right],$$
+GeoPressureR therefore adjusts the barometric equation with the actual ground-level pressure $P_{ERA5}$, temperature $T_{ERA5}$ and surface elevation $z_{ERA5}$ retrieved from ERA5 at the bird's location $x$, $$ z_{gl}(x)=z_{ERA5}(x) + \frac{T_{ERA5}(x)}{L_b} \left[\left( \frac{P_{gl}}{P_{ERA5}(x)} \right) ^{-\frac{RL_b}{g M}}-1\right],$$
 
-See more information on the [GeoPressureAPI documentation](https://geopressure.org/GeoPressureAPI/#description-1).
+By default (`altitude_formula = "virtual"`), $T_{ERA5}$ is the 2 m virtual temperature, which accounts for humidity, and $L_b$ is the lapse rate of the GPT3 troposphere model; `altitude_formula = "standard"` uses the 2 m temperature and the standard lapse rate. ERA5 is read from global ERA5 single levels (`era5_dataset = "single-levels"`, the default), which gives the most accurate altitude. See `?pressurepath_create` and the [altitude validation](https://github.com/GeoPressure/altitude-validation) for more information.
 
 We can compare these two altitudes for the first stationary period,
 
@@ -168,7 +168,7 @@ lonlat <- data.frame(
   lon = pressurepath$lon,
   lat = pressurepath$lat
 )
-distance <- geosphere::distHaversine(tail(lonlat, -1), head(lonlat, -1))
+distance <- haversine_distance(tail(lonlat, -1), head(lonlat, -1))
 pressurepath$distance <- c(0, cumsum(distance))
 
 # Get also a point per stap_id
@@ -190,12 +190,12 @@ p <- ggplot() +
   geom_line(data = elevation, aes(x = distance, y = X50, color = "ground")) +
   geom_line(
     data = pressurepath,
-    aes(x = distance / 1000, y = altitude, color = "flight")
+    aes(x = distance, y = altitude, color = "flight")
   ) +
   geom_point(
     data = pp_stap,
     aes(
-      x = distance / 1000,
+      x = distance,
       y = altitude,
       name = stap_id,
       color = "stap",
@@ -213,7 +213,7 @@ p <- ggplot() +
       stap = "Stationary period"
     )
   ) +
-  guides(size = FALSE)
+  guides(size = "none")
 
 # Interactive plot
 plotly::layout(plotly::ggplotly(p), legend = list(orientation = "h"))
@@ -221,7 +221,7 @@ plotly::layout(plotly::ggplotly(p), legend = list(orientation = "h"))
 
 ## Retrieve ERA5 variables and sunrise along path
 
-`pressurepath_create()` can also be used to retrieve other ERA5 variables along a path, such as temperature and precipitation. This retrieves data from both [ERA5-single-levels](https://doi.org/10.24381/cds.adbb2d47) and [ERA5-LAND](https://doi.org/10.24381/cds.e2161bac) datasets. Use `pressurepath_variable_available()` to list the variables available for each data source. In addition, `pressurepath_create()` also computes the local sunrise and sunset time along the path using `path2twilight()`.  
+`pressurepath_create()` can also be used to retrieve other ERA5 variables along a path, such as temperature and precipitation. By default, this retrieves data from [ERA5-single-levels](https://doi.org/10.24381/cds.adbb2d47); use `era5_dataset = "land"` or `"both"` to retrieve [ERA5-LAND](https://doi.org/10.24381/cds.e2161bac) variables. Use `pressurepath_variable_available()` to list the variables available for each data source. In addition, `pressurepath_create()` also computes the local sunrise and sunset time along the path using `path2twilight()`.  
 
 
 ```{r 06-pressurepath-advanced-create}

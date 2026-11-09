@@ -23,8 +23,8 @@ Start the app with the `geolightviz()` function using either
 ```{r 08-geolightviz-run}
 #| eval: false
 geolightviz(tag) # tag object
-geolightviz("18LX") #  interim file
-geolightviz("data/twilight-label/18LX-labeled.csv") # the label file directly
+geolightviz("18LX") # tag id, reading data/interim/18LX.RData
+geolightviz("path/to/18LX.RData") # an interim .RData file
 ```
 
 By default, the app starts in a background R process (`run_bg = TRUE`), so your console remains available.

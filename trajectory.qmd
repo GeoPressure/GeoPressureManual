@@ -168,7 +168,7 @@ plot_path(path_simulation, plot_leaflet = FALSE)
 
 ## Save
 
-You might want to save some of the key objects such as `tag` or `marginal` in an `R` format. Following the default structure described in [GeoPressureTemplate](https://github.com/GeoPressure/GeoPressureTemplate#project-structure-file_folder), you should save them in the `./data/interim` folder.
+You might want to save some of the key objects such as `tag` or `marginal` in an `R` format. Following the default structure described in [GeoPressureTemplate](geopressuretemplate-intro.html#project-structure), you should save them in the `./data/interim` folder.
 
 ```{r 03-save-interim}
 #| warning: false

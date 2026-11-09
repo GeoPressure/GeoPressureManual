@@ -35,8 +35,9 @@ Using the examples of a Swainson's Warbler and a Great Reed Warbler, this user g
   - [12 Twilight label](https://geopressure.org/GeoPressureManual/geopressuretemplate-twilight.html)
   - [13 Workflow](https://geopressure.org/GeoPressureManual/geopressuretemplate-workflow.html)
 - GeoLocator DP
-  - [14 Create](https://geopressure.org/GeoPressureManual/geolocator-create.html)
-  - [15 Read and use](https://geopressure.org/GeoPressureManual/geolocator-read.html)
+  - [14 Publish your data](https://geopressure.org/GeoPressureManual/geolocator-create.html)
+  - [15 Reuse a study](https://geopressure.org/GeoPressureManual/geolocator-read.html)
+  - [16 Compare studies with the Master](https://geopressure.org/GeoPressureManual/geolocator-master.html)
 - Appendix
   - [A Resources](https://geopressure.org/GeoPressureManual/resources.html)
   - [B Probability aggregation](https://geopressure.org/GeoPressureManual/probability-aggregation.html)

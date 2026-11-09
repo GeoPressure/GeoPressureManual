@@ -20,7 +20,7 @@ After performing all preparation steps, you are able to run the entire workflow 
 geopressuretemplate("18LX")
 ```
 
-The `geopressuretemplate()` function calls on three child functions outlined below. `data/interim/{id}.Rdata` is created in Step 1, and then updated in steps 2 and 3 with the main variables (see below).  
+The `geopressuretemplate()` function calls on three child functions outlined below. `data/interim/{id}.RData` is created in Step 1, and then updated in steps 2 and 3 with the main variables (see below).  
 
 **1. `geopressuretemplate_tag()`**
 
@@ -28,7 +28,7 @@ The `geopressuretemplate()` function calls on three child functions outlined bel
 2. [`tag_label()`](https://geopressure.org/GeoPressureR/reference/tag_label): Adds labels.
 3. [`tag_set_map()`](https://geopressure.org/GeoPressureR/reference/tag_set_map): Sets the spatial and temporal parameters.
 4. \*[`geopressure_map()`](https://geopressure.org/GeoPressureR/reference/geopressure_map) Computes the pressure likelihood.
-5. \*[`twilight_create()`](https://geopressure.org/GeoPressureR/reference/twilight_create) `|>` [`twilight_read()`](https://geopressure.org/GeoPressureR/reference/twilight_read) `|>` [`geolight_map()`](https://geopressure.org/GeoPressureR/reference/geolight_map): Computes the light likelihood.
+5. \*[`twilight_create()`](https://geopressure.org/GeoPressureR/reference/twilight_create) `|>` [`twilight_label_read()`](https://geopressure.org/GeoPressureR/reference/twilight_label_read) `|>` [`geolight_map()`](https://geopressure.org/GeoPressureR/reference/geolight_map): Computes the light likelihood.
 
 **2.`geopressuretemplate_graph()`**
 
@@ -84,7 +84,7 @@ The tag workflow simply consists of preparing the tag data and computing the lik
 tag <- geopressuretemplate_tag(id)
 ```
 
-At the end of each geopressuretemplate function the interim file (e.g. `data/interim/18LX.Rdata`) is create or updated. Next geopressuretemplate functions will re-use this file to load variables.
+At the end of each geopressuretemplate function the interim file (e.g. `data/interim/18LX.RData`) is create or updated. Next geopressuretemplate functions will re-use this file to load variables.
 
 ## Graph
 
@@ -92,10 +92,10 @@ The graph workflow uses the `tag` computed before to create the graph and produc
 
 ```{r 13-graph-workflow}
 #| eval: false
-graph <- geopressuretemplate_graph(id)
+geopressuretemplate_graph(id)
 ```
 
-Because the construction of the graph can be a bit more complicated and takes a lot of time, we've implemented a `tryCatch` approach which returns the `graph` in case the code fails during the processing so that you can troubleshoot the problem more easily.
+On success, the outputs are saved in the interim file and its path is returned invisibly. Because the construction of the graph can be a bit more complicated and takes a lot of time, we've implemented a `tryCatch` approach which returns the `graph` (without saving) in case the code fails during the processing so that you can troubleshoot the problem more easily, e.g. with `graph <- geopressuretemplate_graph(id)`.
 
 ## Pressurepath
 

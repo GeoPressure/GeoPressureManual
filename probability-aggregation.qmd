@@ -13,7 +13,7 @@ library(GeoPressureR)
 
 At the core of GeoPressure, we try to estimate the position of the bird based on a pressure mismatch of the geolocator and a weather reanalysis dataset <a href="https://www.ecmwf.int/en/forecasts/datasets/reanalysis-datasets/era5" target="_blank">ERA5</a>. A major challenge in this process is the transformation of map of errors (mismatch) into a probability.
 
-In this chapter, we present this challenge, look at the theory behind it, and explore possible solutions using Great Reed Warbler (18IC) as an example.
+In this chapter, we present this challenge, look at the theory behind it, and explore possible solutions using the Swainson's Warbler (CB619) as an example.
 
 ## Problem presentation
 
@@ -31,7 +31,7 @@ To solve this issue, we remove the mean pressure difference, essentially ignorin
 
 This way of building the error term has some important consequences. A timeseries of only one datapoint always yields zero error at all locations, resulting in an equally probable map. As the number of datapoints increases, the error term becomes more and more able to distinguish between "good" and "bad" locations.
 
-### Error term for the Great Reed Warbler
+### Error term for the Swainson's Warbler
 
 Let's load the data and filter
 
@@ -54,7 +54,7 @@ In order to find an appropriate likelihood function, we first need to assume a d
 
 The figure below shows the error distribution at the known location of equipment and retrieval.
 
-![Histogram of the error term](assets/Appendix_F_4.png){width="100%"} They all look close enough to a Gaussian distribution. In the case of the Great Reed Warbler, the standard deviation is around 0.5.
+![Histogram of the error term](assets/Appendix_F_4.png){width="100%"} They all look close enough to a Gaussian distribution. In this example, the standard deviation is around 0.5.
 
 ```{r B-set-sd}
 sd <- 0.5
