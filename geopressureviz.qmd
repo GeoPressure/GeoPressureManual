@@ -32,7 +32,7 @@ See [Map tiles](resources.html#map-tiles) to configure optional CARTO, Mapbox, o
 
     1.  **Map**: this displays the trajectory of the bird. The size of the circles indicates the duration of the stopover (hover over them to get more info).
 
-    2.  **Bottom panel**: this shows the `pressurepath` of the trajectory which must be computed beforehand. The grey line is the raw data (`pressurepath$pressure_tag`), the black dots are pressure points labelled as outliers, and colored lines are the normalized pressure at the best match location (i.e., `pressurepath$surface_pressure_norm`). The color matches the circles on the map.
+    2.  **Bottom panel**: this shows the pressure timeseries. A `pressurepath` is optional: without one, the panel starts with the tag pressure only and "Query pressure" adds the ERA5 pressure of the current stationary period. The grey line is the raw data (`tag$pressure$value`), the black dots are pressure points labelled as outliers, and colored lines are the normalized pressure at the best match location (i.e., `pressurepath$surface_pressure_norm`). The color matches the circles on the map.
 
     3.  **Side panel**: this provides key information and tools to navigate the app.
 
