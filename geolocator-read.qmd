@@ -148,7 +148,7 @@ create_geopressuretemplate(path = "~/woodlandkingfisher", pkg = pkg)
 
 ## Licence, embargo and contact
 
-`pkg$licenses` gives the licence and `pkg$bibliographicCitation` the citation. Read the record's description too: authors often ask to be contacted, and they know the caveats of their data. `pkg$contributors` lists their roles: write to the contact person. An embargoed record has public metadata but no files: `read_zenodo()` warns and returns the metadata only. Ask its authors for access, and do not redistribute data obtained this way.
+`pkg$licenses` gives the licence and `pkg$bibliographicCitation` the citation, with the concept DOI: cite it, and record the version you used (`pkg$id`, e.g. in your methods). Read the record's description too: authors often ask to be contacted, and they know the caveats of their data. `pkg$contributors` lists their roles: write to the contact person. An embargoed record has public metadata but no files: `read_zenodo()` warns and returns the metadata only. Ask its authors for access, and do not redistribute data obtained this way.
 
 ## Compare studies
 

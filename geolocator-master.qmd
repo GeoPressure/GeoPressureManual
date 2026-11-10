@@ -31,9 +31,9 @@ theme_set(
 
 ### Read and save a release
 
-Each release has a **version DOI**, the one to read and cite, and all releases share a **concept DOI** ([10.5281/zenodo.18187092](https://doi.org/10.5281/zenodo.18187092)) that always resolves to the latest one. The download is about 1 GB, mostly the in-flight `pressurepaths`.
+Each release has a **version DOI**, and all releases share a **concept DOI** ([10.5281/zenodo.18187092](https://doi.org/10.5281/zenodo.18187092)) that always resolves to the latest one. Cite the concept DOI, as `master$bibliographicCitation` does, and record the version you used (e.g. in your methods). The download is about 1 GB, mostly the in-flight `pressurepaths`.
 
-`read_zenodo()` also accepts the concept id, but then reads whichever release is the latest. For reproducible results, use the version id, and keep `master$id`, `master$version` and `packageVersion("GeoLocatoR")` with your results.
+`read_zenodo()` also accepts the concept id, but then reads whichever release is the latest. For reproducible results, read the version id, and keep `master$id`, `master$version` and `packageVersion("GeoLocatoR")` with your results.
 
 ```{r 17-read-master}
 #| cache: true
@@ -432,4 +432,4 @@ Empty cells are species whose projects have no wind model, no twilights or no `p
 
 ## Cite the data
 
-Cite the **Master release** you used and the **source packages** that contributed the birds of your analysis (see [Select birds by what they did](#select-birds-by-what-they-did)). Most packages are under CC BY 4.0; check the `licenses` of each one. If your results rely on a few projects, contact their authors: they know their data best. Embargoed packages are listed in the catalogue with their `embargo` date: ask their authors for access.
+Cite the **Master** with its concept DOI, giving the release version you used (e.g. in your methods), and the **source packages** that contributed the birds of your analysis (see [Select birds by what they did](#select-birds-by-what-they-did)). Most packages are under CC BY 4.0; check the `licenses` of each one. If your results rely on a few projects, contact their authors: they know their data best. Embargoed packages are listed in the catalogue with their `embargo` date: ask their authors for access.
