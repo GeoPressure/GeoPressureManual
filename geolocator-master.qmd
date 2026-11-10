@@ -1,6 +1,6 @@
 # Compare studies with the Master
 
-A single GeoLocator Data Package describes one study (see [Reuse a study](geolocator-read.qmd)). The **Master GeoLocator Data Package** compiles every published package of the [geolocator-dp Zenodo community](https://zenodo.org/communities/geolocator-dp) into one standardised dataset, released once a year with its own DOI. It is the starting point for questions that no single study can answer.
+A single GeoLocator Data Package describes one study (see [Reuse a study](geolocator-read.qmd)). The **Master GeoLocator Data Package** compiles the open packages of the [geolocator-dp Zenodo community](https://zenodo.org/communities/geolocator-dp) into one standardised dataset. Each release is numbered `YEAR.N` and has its own DOI. Embargoed packages are described in its catalogue, and their data join the first release after their embargo ends. It is the starting point for questions that no single study can answer.
 
 The first part of this chapter shows how to read the Master, choose source packages and select birds. The second part uses it to describe how songbirds and other small migrants stop, fly, and use the wind, across all tracked species.
 
@@ -33,6 +33,8 @@ theme_set(
 
 Each release has a **version DOI**, the one to read and cite, and all releases share a **concept DOI** ([10.5281/zenodo.18187092](https://doi.org/10.5281/zenodo.18187092)) that always resolves to the latest one. The download is about 1 GB, mostly the in-flight `pressurepaths`.
 
+`read_zenodo()` also accepts the concept id, but then reads whichever release is the latest. For reproducible results, use the version id, and keep `master$id`, `master$version` and `packageVersion("GeoLocatoR")` with your results.
+
 ```{r 17-read-master}
 #| cache: true
 #| message: false
@@ -45,6 +47,24 @@ Download it once and write it to disk with `write_gldp()`. Later sessions read t
 #| eval: false
 write_gldp(master, "data/master_2026.0")
 master <- read_gldp("data/master_2026.0")
+```
+
+### Read only the tables you need
+
+`read_zenodo()` downloads every table, including `pressurepaths`, which is most of the release. If your question does not need flight altitude, download only `datapackage.json` and the tables you need, then remove the other tables from the descriptor, because `read_gldp()` reads every file it lists:
+
+```{r 17-read-tables}
+#| eval: false
+dir <- "data/master_2026.0"
+files <- c("datapackage.json", "tags.csv", "observations.csv", "staps.csv", "paths.csv", "edges.csv", "twilights.csv")
+dir.create(dir, recursive = TRUE)
+for (f in files) {
+  download.file(glue::glue("https://zenodo.org/records/18187093/files/{f}?download=1"), file.path(dir, f), mode = "wb")
+}
+desc <- jsonlite::read_json(file.path(dir, "datapackage.json"))
+desc$resources <- Filter(\(r) r$path %in% files, desc$resources)
+jsonlite::write_json(desc, file.path(dir, "datapackage.json"), auto_unbox = TRUE, null = "null", digits = NA)
+master <- read_gldp(dir)
 ```
 
 The Master has the same tables as any GeoLocator DP, but no `measurements`: it holds trajectories, not raw sensor data. It adds a catalogue of its source packages in `master$datapackages`, with one row per package.
@@ -155,7 +175,7 @@ pkg <- read_zenodo(doi)
 
 ::: callout-tip
 ## Build your own compilation
-`merge_gldp()` combines any GeoLocator DPs into one, with the same `datapackages` catalogue as the Master. Use it to add packages that are not in the Master yet, such as embargoed data you have access to:
+`merge_gldp()` combines any GeoLocator DPs into one, with the same `datapackages` catalogue as the Master. Use it to add packages that are not in the Master yet, such as embargoed data you have access to. It stops if two packages share a `tag_id`:
 
 ```{r 17-merge}
 #| eval: false
@@ -412,4 +432,4 @@ Empty cells are species whose projects have no wind model, no twilights or no `p
 
 ## Cite the data
 
-Cite the **Master release** you used and the **source packages** that contributed the birds of your analysis (see [Select birds by what they did](#select-birds-by-what-they-did)). Most packages are under CC BY 4.0. If your results rely on a few projects, contact their authors: they know their data best.
+Cite the **Master release** you used and the **source packages** that contributed the birds of your analysis (see [Select birds by what they did](#select-birds-by-what-they-did)). Most packages are under CC BY 4.0; check the `licenses` of each one. If your results rely on a few projects, contact their authors: they know their data best. Embargoed packages are listed in the catalogue with their `embargo` date: ask their authors for access.
