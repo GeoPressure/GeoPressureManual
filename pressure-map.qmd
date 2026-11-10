@@ -102,7 +102,7 @@ plot(tag$map_pressure_mask)
 
 ### Compute likelihood maps
 
-We combine and convert these two maps into a single likelihood map using $$f \propto \exp \left(-w(n) \frac{\textbf{MSE}}{\sigma^2} \right) [\textbf{z}_{thr}>thr_{mask}]$$ where $\sigma$ is the standard deviation of pressure error and $thr_{mask}$ is the threshold of the mask.
+We combine and convert these two maps into a single likelihood map using $$f \propto \exp \left(-w(n) \, n \frac{\textbf{MSE}}{2\sigma^2} \right) [\textbf{z}_{thr}>thr_{mask}]$$ where $\sigma$ is the standard deviation of pressure error and $thr_{mask}$ is the threshold of the mask.
 
 Because the auto-correlation of the timeseries is not accounted for in this equation, we use a log-linear pooling weight $w(n)=\log(n)/n$, where $n$ is the number of data-points in the time series. See [Probability aggregation](probability-aggregation.html#gaussian-likelihood-function) for more information on this.
 
@@ -119,7 +119,7 @@ tag <- geopressure_map_likelihood(
 
 The standard deviation `sd` ($\sigma$) plays an important role in the spread of the uncertainty of your map. It accounts for (1) error in reanalysis data (may vary spatially, but generally assumed small), (2) sensor error (also assumed low), and (3) bird vertical movement (most significant contribution). A bird moving up and down a tall tree (1 hPa = 10 m) is likely to affect the match.
 
-This value should ideally be calibrated, but it is usually safe to start with a value of `1`. We see how to adjust this value in [check #4 of the labelling procedure](labelling-tracks.html#pressurepath-checks). Swainson's Warbler tend to stay low with small pressure variation such that a value of `0.5` is more adequate. In addition, following several trial and error test, we found that scaling the log linear pooling function to `4 * log(n) / n` provides more satisfying result.
+This value should ideally be calibrated, but it is usually safe to start with a value of `1`. We see how to adjust this value in [the pressurepath check of the labelling procedure](labelling-tracks.html#pressurepath-check). Swainson's Warbler tend to stay low with small pressure variation such that a value of `0.5` is more adequate. In addition, following several trial and error test, we found that scaling the log linear pooling function to `4 * log(n) / n` provides more satisfying result.
 :::
 
 The resulting pressure likelihood map can be visualized with:
