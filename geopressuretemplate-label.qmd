@@ -43,16 +43,16 @@ tag_id:
     arguments: value
 ```
 
-Note that the values are written in JSON format (and not `R`), so for a vector/array you need to use `[, ]` and for an array of objects (named lists), you need to use `-` and indentation. Here is an example:
+Note that the values are written in YAML (and not `R`), so for a vector/array you need to use `[, ]`. A table such as `known` is written column-wise, with one value or one value per row in each column. Here is an example:
 
 ``` yaml
 18LX:
   tag_set_map:
     extent: [-16, 23, 0, 50]
-    known: 
-      - stap_id: 1
-        known_lon: 17.05
-        known_lat: 48.9
+    known:
+      stap_id: [1, -1] # -1 -> last stap
+      known_lon: 17.05
+      known_lat: 48.9
   bird_create:
     scientific_name: "Acrocephalus arundinaceus" # only if you have different species, otherwise add to default
 ```
@@ -74,8 +74,8 @@ ggplotly(
     plot(type = "pressure", plot_plotly = FALSE) +
     geom_vline(
       xintercept = c(
-        as.POSIXct(config::get("tag_create", id)$crop_start),
-        as.POSIXct(config::get("tag_create", id)$crop_end)
+        as.POSIXct(config::get("tag_create", id)$crop_start, tz = "UTC"),
+        as.POSIXct(config::get("tag_create", id)$crop_end, tz = "UTC")
       ),
       color = "red",
       lwd = 1
@@ -85,13 +85,12 @@ ggplotly(
 
 You might want to change `type` to check the values of the other sensors (e.g., `acceleration` or `light`).
 
-Create tag with cropped date:
+Create the tag with the crop dates and clock corrections (`time_shift`, `time_drift`) of `config.yml`:
 
 ```{r tag_create}
-tag <- tag_create(
-  id,
-  crop_start = config::get("tag_create", id)$crop_start,
-  crop_end = config::get("tag_create", id)$crop_end
+tag <- do.call(
+  tag_create,
+  c(list(id = id), geopressuretemplate_config(id)$tag_create)
 )
 ```
 
@@ -117,10 +116,9 @@ Improve the label file until you can draw a coherent trajectory on GeoPressureVi
 
 ```{r}
 #| eval: false
-tag <- tag_create(
-  id,
-  crop_start = config::get("tag_create", id)$crop_start,
-  crop_end = config::get("tag_create", id)$crop_end
+tag <- do.call(
+  tag_create,
+  c(list(id = id), geopressuretemplate_config(id)$tag_create)
 ) |>
   tag_label() |>
   tag_set_map(
