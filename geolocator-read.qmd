@@ -26,6 +26,8 @@ Browse published packages with the [GeoLocatorExplorer](https://geopressure.org/
 pkg <- read_zenodo("13829929")
 ```
 
+A record id or DOI can be a *version* (one fixed release) or a *concept* (all versions, resolving to the latest). `13829929` is the concept id of this study, so `pkg$id` gives the version actually read: keep it with your results. `read_zenodo()` downloads every table of the package, including the raw `measurements`. To read only some tables, see [Read only the tables you need](geolocator-master.qmd#read-only-the-tables-you-need).
+
 ```{r 16-print-gldp}
 #| collapse: true
 print(pkg)
@@ -52,7 +54,7 @@ The trajectory tables add two columns to their primary key:
 | `edges` | `tag_id`, `type`, `j`, `stap_s` |
 | `pressurepaths` | `tag_id`, `type`, `j`, `datetime` |
 
-`type` is either `most_likely`, the single best trajectory (`j = 1`), or `simulation`, random draws from the posterior distribution (`j = 1` to `nj`) that carry the location uncertainty. **Always join trajectory tables on `type` and `j`**, or you will mix trajectories.
+`type` is `most_likely`, the single best trajectory (`j = 1`); `simulation`, random draws from the posterior distribution (`j = 1` to `nj`) that carry the location uncertainty; `geopressureviz`, a path edited by hand in `geopressureviz()`; or `tag`, the most likely position of each stationary period taken separately from its likelihood map, without the movement model. **Always join trajectory tables on `type` and `j`**, or you will mix trajectories.
 
 In dplyr, a join takes the keys in `by`. When the columns have different names, `join_by()` maps them. For example, to get the position where each flight started, join `edges` to `paths` on the departure stationary period `stap_s`:
 
@@ -143,6 +145,10 @@ To re-run the whole study, `create_geopressuretemplate()` creates a [GeoPressure
 #| eval: false
 create_geopressuretemplate(path = "~/woodlandkingfisher", pkg = pkg)
 ```
+
+## Licence, embargo and contact
+
+`pkg$licenses` gives the licence and `pkg$bibliographicCitation` the citation. Read the record's description too: authors often ask to be contacted, and they know the caveats of their data. `pkg$contributors` lists their roles: write to the contact person. An embargoed record has public metadata but no files: `read_zenodo()` warns and returns the metadata only. Ask its authors for access, and do not redistribute data obtained this way.
 
 ## Compare studies
 
