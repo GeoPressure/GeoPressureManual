@@ -163,8 +163,8 @@ plot_pressurepath(pressurepath, type = "hist", plot_plotly = FALSE)
 ```
 
 - For long stationary periods (over 5 days), you want to check that there is a single [mode](https://en.wikipedia.org/wiki/Mode_(statistics)) in your distribution. Two modes indicate that the bird is spending time at two different altitudes. - This is usual when birds have a day site and a night roost at different elevations. In such cases, use the `elev_x` label.
-- The red vertical dotted line indicates +/-3 sd which can be helpful to identify potential outliers.
-- Stationary periods which have an empirical sd greater than the one used (`sd`) are highlighted in red. The likelihood map for these stationary periods might not be correct.
+- The orange vertical dashed lines indicate +/-3 sd which can be helpful to identify potential outliers.
+- Stationary periods which have an empirical sd greater than the one used (`sd`) are highlighted in orange. The likelihood map for these stationary periods might not be correct.
 
 ::: callout-note
 ## How to calibrate `sd`?
