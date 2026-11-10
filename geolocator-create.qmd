@@ -119,11 +119,11 @@ Review the [GeoLocator DP curation policy](https://geopressure.org/GeoLocator-DP
 Before submitting, read the draft back and validate exactly what Zenodo contains.
 
 ::: callout-info
-Reading a draft requires a Zenodo API token. Create one at [Zenodo token settings](https://zenodo.org/account/settings/applications/tokens/new/) and save it in your keyring:
+Reading a draft requires a Zenodo API token. Create one at [Zenodo token settings](https://zenodo.org/account/settings/applications/tokens/new/) and save it in your keyring. `key_set()` asks for the token, so it is not saved in your R history:
 
 ```{r 15-set-zenodo-token}
 #| eval: false
-keyring::key_set_with_value("ZENODO_TOKEN", password = "{your_zenodo_token}")
+keyring::key_set("ZENODO_TOKEN")
 ```
 :::
 
