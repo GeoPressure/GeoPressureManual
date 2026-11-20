@@ -14,6 +14,10 @@ Paper presenting the movement model:
 
 > Nussbaumer, R., Gravey, M., Briedis, M., Liechti, F. & Sheldon, D. (2023) Reconstructing bird trajectories from pressure and wind data using a highly optimised hidden Markov model. *Methods in Ecology and Evolution*, 14, 1118–1129. <https://doi.org/10.1111/2041-210X.14082>
 
+Paper describing the GeoLocator Data Package standard and the [Master GeoLocator Data Package](https://doi.org/10.5281/zenodo.18187092), which compiles all published packages:
+
+> Nussbaumer, R., Adamík, P., Bell, F., et al. (2026). Standardised multi-sensor geolocator data for bird migration ecology. *Scientific Data*. <https://doi.org/10.1038/s41597-026-08873-x>
+
 Paper reviewing the strengths, limitations, and opportunities of geolocation by pressure from a more applied perspective:
 
 > Rhyne, G. S., Stouffer P. C., Briedis, M., Nussbaumer, R. (2024). Barometric geolocators can reveal unprecedented details about the migratory ecology of small birds. *Ornithology*. <https://doi.org/10.1093/ornithology/ukae010>

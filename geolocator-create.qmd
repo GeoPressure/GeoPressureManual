@@ -8,7 +8,7 @@ aliases:
 This tutorial explains how to create a GeoLocator Data Package (GeoLocator DP) from a GeoPressureTemplate project, upload it to Zenodo, and validate the draft before publication.
 
 ::: callout-note
-For an introduction to this format, visit the [GeoLocator DP website](https://geopressure.org/GeoLocator-DP/).
+For an introduction to this format, visit the [GeoLocator DP website](https://geopressure.org/GeoLocator-DP/). The standard and the [Master GeoLocator Data Package](geolocator-master.qmd) are described in [Nussbaumer et al. (2026), *Scientific Data*](https://doi.org/10.1038/s41597-026-08873-x).
 :::
 
 

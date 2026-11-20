@@ -1,6 +1,6 @@
 # Compare studies with the Master
 
-A single GeoLocator Data Package describes one study (see [Reuse a study](geolocator-read.qmd)). The **Master GeoLocator Data Package** compiles the open packages of the [geolocator-dp Zenodo community](https://zenodo.org/communities/geolocator-dp) into one standardised dataset. Each release is numbered `YEAR.N` and has its own DOI. Embargoed packages are described in its catalogue, and their data join the first release after their embargo ends. It is the starting point for questions that no single study can answer.
+A single GeoLocator Data Package describes one study (see [Reuse a study](geolocator-read.qmd)). The **Master GeoLocator Data Package** compiles the open packages of the [geolocator-dp Zenodo community](https://zenodo.org/communities/geolocator-dp) into one standardised dataset. Each release is numbered `YEAR.N` and has its own DOI. Embargoed packages are described in its catalogue, and their data join the first release after their embargo ends. It is the starting point for questions that no single study can answer. The Master and the GeoLocator DP standard are described in [Nussbaumer et al. (2026), *Scientific Data*](https://doi.org/10.1038/s41597-026-08873-x).
 
 The first part of this chapter shows how to read the Master, choose source packages and select birds. The second part uses it to describe how songbirds and other small migrants stop, fly, and use the wind, across all tracked species.
 
@@ -432,4 +432,12 @@ Empty cells are species whose projects have no wind model, no twilights or no `p
 
 ## Cite the data
 
-Cite the **Master** with its concept DOI, giving the release version you used (e.g. in your methods), and the **source packages** that contributed the birds of your analysis (see [Select birds by what they did](#select-birds-by-what-they-did)). Most packages are under CC BY 4.0; check the `licenses` of each one. If your results rely on a few projects, contact their authors: they know their data best. Embargoed packages are listed in the catalogue with their `embargo` date: ask their authors for access.
+Cite the **Master** with its concept DOI, giving the release version you used (e.g. in your methods):
+
+> Nussbaumer, R., Adamík, P., et al. Master GeoLocator Data Package (version `YEAR.N`). Zenodo. <https://doi.org/10.5281/zenodo.18187092>
+
+and the paper describing the Master and the GeoLocator DP standard:
+
+> Nussbaumer, R., Adamík, P., Bell, F., et al. (2026). Standardised multi-sensor geolocator data for bird migration ecology. *Scientific Data*. <https://doi.org/10.1038/s41597-026-08873-x>
+
+Also cite the **source packages** that contributed the birds of your analysis (see [Select birds by what they did](#select-birds-by-what-they-did)). Most packages are under CC BY 4.0; check the `licenses` of each one. If your results rely on a few projects, contact their authors: they know their data best. Embargoed packages are listed in the catalogue with their `embargo` date: ask their authors for access.
